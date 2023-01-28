@@ -4,5 +4,5 @@
 - 🌱 I’m currently learning ...
 - 👯 I’m looking to collaborate on ...
 
-![Estatísticas](https://github-readme-stats.vercel.app/api?username=Eduardo-Virissimo&show_icons=true&theme=cobalt)
+![Estatísticas](https://github-readme-stats.vercel.app/api?username=Eduardo-Virissimo&show_icons=true&theme=tokyonight)
 
