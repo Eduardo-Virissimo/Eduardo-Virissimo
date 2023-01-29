@@ -2,6 +2,7 @@
 
 - 🟣 Estudando: Java | MySQL
 - 🟣 Caminhando para ser um desenvolvedor junior fullstack!
+- 🟣 Cursando: Desenvolvimento de Sistemas SESI SENAI SC
 
 <div>
 <img height="150" src="https://github-readme-stats.vercel.app/api?username=Eduardo-Virissimo&show_icons=true&theme=tokyonight">
