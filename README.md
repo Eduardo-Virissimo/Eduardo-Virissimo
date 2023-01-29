@@ -1,8 +1,7 @@
 ### Olá! 👻
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
+- 🟣 Estudando Java | MySQL
+- 🟣 Caminhando para ser um desenvolvedor junior fullstack!
 
 ![Estatísticas](https://github-readme-stats.vercel.app/api?username=Eduardo-Virissimo&show_icons=true&theme=tokyonight)
 ![Estatísticas2](https://github-readme-stats.vercel.app/api/top-langs/?username=Eduardo-Virissimo&layout=compact&theme=tokyonight)
