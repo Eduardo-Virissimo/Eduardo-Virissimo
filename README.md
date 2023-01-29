@@ -5,7 +5,7 @@
 
 <div>
 <img height="180" src="https://github-readme-stats.vercel.app/api?username=Eduardo-Virissimo&show_icons=true&theme=tokyonight">
-![Estatísticas2](https://github-readme-stats.vercel.app/api/top-langs/?username=Eduardo-Virissimo&layout=compact&theme=tokyonight)
+<img height="180" src="https://github-readme-stats.vercel.app/api/top-langs/?username=Eduardo-Virissimo&layout=compact&theme=tokyonight">
 </div>
 ## Social
 
