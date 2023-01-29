@@ -1,6 +1,6 @@
 ### Olá! 👻
 
-- 🟣 Estudando Java | MySQL
+- 🟣 Estudando: Java | MySQL
 - 🟣 Caminhando para ser um desenvolvedor junior fullstack!
 
 ![Estatísticas](https://github-readme-stats.vercel.app/api?username=Eduardo-Virissimo&show_icons=true&theme=tokyonight)
