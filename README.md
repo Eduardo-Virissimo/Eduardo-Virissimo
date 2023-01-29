@@ -8,7 +8,7 @@
 <img height="150" src="https://github-readme-stats.vercel.app/api/top-langs/?username=Eduardo-Virissimo&layout=compact&theme=tokyonight">
 </div>
 
-### Social
+### Social 👻
 
 <div> 
    <a href = "mailto:eduardoteixeiravirissimo@gmail.com"><img src="https://img.shields.io/badge/-Gmail-%23333?style=for-the-badge&logo=gmail&logoColor=white" target="_blank"></a>
