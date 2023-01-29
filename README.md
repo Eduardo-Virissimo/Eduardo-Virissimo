@@ -4,10 +4,11 @@
 - 🟣 Caminhando para ser um desenvolvedor junior fullstack!
 
 <div>
-<img height="140" src="https://github-readme-stats.vercel.app/api?username=Eduardo-Virissimo&show_icons=true&theme=tokyonight">
-<img height="140" src="https://github-readme-stats.vercel.app/api/top-langs/?username=Eduardo-Virissimo&layout=compact&theme=tokyonight">
+<img height="150" src="https://github-readme-stats.vercel.app/api?username=Eduardo-Virissimo&show_icons=true&theme=tokyonight">
+<img height="150" src="https://github-readme-stats.vercel.app/api/top-langs/?username=Eduardo-Virissimo&layout=compact&theme=tokyonight">
 </div>
-## Social
+
+### Social
 
 <div> 
    <a href = "mailto:eduardoteixeiravirissimo@gmail.com"><img src="https://img.shields.io/badge/-Gmail-%23333?style=for-the-badge&logo=gmail&logoColor=white" target="_blank"></a>
