@@ -1,6 +1,6 @@
 ### Olá! 👻
 
-- 🟣 Estudando: Java | JavaScript | MySQL
+- 🟣 Estudando: Java | JavaScript | CSS | HTML
 - 🟣 Caminhando para ser um desenvolvedor junior fullstack!
 - 🟣 Cursando: Desenvolvimento de Sistemas SESI SENAI SC
 
