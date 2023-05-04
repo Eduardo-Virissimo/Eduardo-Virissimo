@@ -1,6 +1,6 @@
 ### Olá! 👻
 
-- 🟣 Estudando: Java | JavaScript | CSS | HTML
+- 🟣 Estudando: React | JavaScript | CSS | HTML
 - 🟣 Caminhando para ser um desenvolvedor junior fullstack!
 - 🟣 Cursando: Desenvolvimento de Sistemas SESI SENAI SC
 
