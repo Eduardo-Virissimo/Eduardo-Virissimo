@@ -11,7 +11,6 @@
 ###
 
 <div align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=Eduardo-Virissimo&hide_title=true&hide_rank=true&show_icons=true&include_all_commits=true&count_private=true&disable_animations=true&theme=aura_dark&locale=pt-br&hide_border=true" height="150" alt="stats graph"  />
   <img src="https://github-readme-stats.vercel.app/api/top-langs?username=Eduardo-Virissimo&locale=pt-br&hide_title=true&layout=compact&card_width=320&langs_count=8&theme=aura_dark&hide_border=true" height="150" alt="languages graph"  />
 </div>
 
