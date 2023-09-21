@@ -2,7 +2,7 @@
 
 - 🟣 Estudando: ReactJs | JavaScript | TailwindCSS | NodeJs
 - 🟣 Caminhando para ser um desenvolvedor junior fullstack!
-- 🟣 Cursando: Desenvolvimento de Sistemas SESI SENAI SC
+- 🟣 Técnico em: Desenvolvimento de Sistemas SESI SENAI SC
 
 ###
 
