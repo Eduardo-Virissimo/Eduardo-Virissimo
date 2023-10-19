@@ -63,30 +63,6 @@
 
 ###
 
-<h1 align="center"></h1>
-
-###
-
-<h4 align="left">Repositórios Front-End</h4>
-
-###
-
-<p align="left">Repositorios</p>
-
-###
-
-<h4 align="left">Repositórios Back-End</h4>
-
-###
-
-<p align="left">Repositorios</p>
-
-###
-
-<h1 align="center"></h1>
-
-###
-
 <img align="right" height="230" src="https://www.tramaweb.com.br/wp-content/uploads/2019/10/f6719fd6-tenor.gif"  />
 
 ###
