@@ -67,6 +67,5 @@
 
 ###
 
-![Snake Game](https://github.com/Eduardo-Virissimo/Eduardo-Virissimo/blob/output/github-contribution-grid-snake.svg)
 
 ###
