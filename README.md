@@ -1,4 +1,4 @@
-<h1 align="left">Olá 👻!</h1>
+<h1 align="left">Olá! 🐉</h1>
 
 - 🟣 Estudando: ReactJs | JavaScript | Python
 - 🟣 Caminhando para ser um desenvolvedor fullstack!
