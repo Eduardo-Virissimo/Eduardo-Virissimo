@@ -1,9 +1,9 @@
 <h1 align="left">Olá! </h1>
 
-- 🟣 Estudando: ReactJs | JavaScript | Python
-- 🟪 Caminhando para ser um desenvolvedor fullstack!
-- 🟪 Técnico em: Desenvolvimento de Sistemas
-- 🟣 Cursando Superior em: Análise em Desenvolvimento de Sistemas
+- 🟤 Estudando: ReactJs | JavaScript | Python
+- 🟤 Caminhando para ser um desenvolvedor fullstack!
+- 🟤 Técnico em: Desenvolvimento de Sistemas
+- 🟤 Cursando Superior em: Análise em Desenvolvimento de Sistemas
 
 ###
 
