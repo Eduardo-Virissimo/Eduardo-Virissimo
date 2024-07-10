@@ -1,8 +1,9 @@
-<h1 align="left">Olá! 🐉</h1>
+<h1 align="left">Olá! </h1>
 
 - 🟣 Estudando: ReactJs | JavaScript | Python
-- 🟣 Caminhando para ser um desenvolvedor fullstack!
-- 🟣 Técnico em: Desenvolvimento de Sistemas SESI SENAI SC
+- 🟪 Caminhando para ser um desenvolvedor fullstack!
+- 🟪 Técnico em: Desenvolvimento de Sistemas
+- 🟣 Cursando Superior em: Análise em Desenvolvimento de Sistemas
 
 ###
 
