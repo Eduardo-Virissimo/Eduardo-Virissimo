@@ -48,7 +48,7 @@
 ###
 
 <div align="center">
-  <img src="https://www.tramaweb.com.br/wp-content/uploads/2019/10/f6719fd6-tenor.gif" height="230" alt="gatinho gif"  />
+  <img src="https://www.tramaweb.com.br/wp-content/uploads/2019/10/f6719fd6-tenor.gif" height="200" alt="gatinho gif"  />
 </div>
 
 ###
