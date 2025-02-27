@@ -1,6 +1,6 @@
 <h1 align="left">Olá! </h1>
 
-- 🟤 Estudando: ReactJs | JavaScript | Python
+- 🟤 Estudando: TypeScript | Python
 - 🟤 Caminhando para ser um desenvolvedor fullstack!
 - 🟤 Cursando Superior em: Análise em Desenvolvimento de Sistemas
 
