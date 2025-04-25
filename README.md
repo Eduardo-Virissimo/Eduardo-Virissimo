@@ -1,8 +1,8 @@
 <h1 align="left">Hello! </h1>
 
-- 🟤 Studying: **TypeScript | Python**  
-- 🟤 On the path to becoming a **full-stack developer!**  
-- 🟤 Pursuing a Bachelor's Degree in **Systems Analysis and Development**  
+- 🔵 Studying: **TypeScript | Python**  
+- 🔵 On the path to becoming a **full-stack developer!**  
+- 🔵 Pursuing a Bachelor's Degree in **Systems Analysis and Development**  
 
 ###
 
