@@ -1,6 +1,6 @@
 <h1 align="left">Hello, world_ 👾</h1>
 
--  Studying: **TypeScript | React**  
+-  Studying: **TypeScript | React | PHP**  
 -  On the path to becoming a **Full-Stack Developer**  
 -  Pursuing a Bachelor's Degree in **Systems Analysis and Development**
 
@@ -16,6 +16,7 @@
 ├── Node.js
 ├── PHP / Java
 ├── Python
+├── PHP
 └── MySQL
 </pre>
 
