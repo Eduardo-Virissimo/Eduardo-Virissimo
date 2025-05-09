@@ -1,6 +1,6 @@
 <h1 align="left">Hello, world_ 👾</h1>
 
--  Studying: **TypeScript | Python**  
+-  Studying: **TypeScript | React**  
 -  On the path to becoming a **Full-Stack Developer**  
 -  Pursuing a Bachelor's Degree in **Systems Analysis and Development**
 
