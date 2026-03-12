@@ -7,7 +7,7 @@
 [ Front-End ]
 ├── HTML5
 ├── CSS3 / TailwindCSS
-└── JavaScript / React [advanced studies]
+└── TypeScript / JavaScript / React [advanced studies]
 
 [ Back-End ]
 ├── Node.js [advanced studies]
