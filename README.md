@@ -27,8 +27,7 @@
    ├─ Docker / CI/CD
    └─ Figma / UI/UX
       ㅤ
-      ㅤ
-        ㅤ
+      ㅤㅤ
       </pre>
     </td>
     <td width="25%" align="center" valign="top">
