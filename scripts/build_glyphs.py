@@ -5,14 +5,14 @@ sem depender de fonte instalada. Só precisa rodar de novo se mudar o peso ou
 precisar de caracteres novos.
 
     pip install fonttools
-    python scripts/build_glyphs.py caminho/para/Rubik[wght].ttf
+    python scripts/build_glyphs.py caminho/para/Rubik[wght].ttf [peso, padrão 500]
 """
 import json, os, sys
 from fontTools.ttLib import TTFont
 from fontTools.varLib.instancer import instantiateVariableFont
 from fontTools.pens.svgPathPen import SVGPathPen
 
-WEIGHT = 700
+WEIGHT = int(sys.argv[2]) if len(sys.argv) > 2 else 500
 CHARS = ("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
          " &-.,:!?'/áàâãéêíóôõúçÁÀÂÃÉÊÍÓÔÕÚÇ")
 
