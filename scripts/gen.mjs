@@ -453,24 +453,22 @@ for (const [name, icon, W, title, sub] of [
 
 // ---------- rodapé (papel) ----------
 {
-  const ctx = new Map(), W = 1000, H = 150, s = "trying to be better", size = 24;
-  const tw = MONO.width(s, size), x = (W - tw) / 2;
-  const n = s.length, cx0 = x + tw + 3;
+  // barra fina no fim do README, só com o lema digitado no meio (mesma digitação dos outros painéis)
+  const ctx = new Map(), W = 1000, H = 76, D = 10, y = 39;
+  const pct = (t) => r((t / D) * 100);
+  const s = "trying to be better", size = 16, tw = MONO.width(s, size), x = (W - tw) / 2, n = s.length;
+  const t0 = 0.6, t1 = t0 + 0.06 * n;
   const body = `  ${panel(W, H, PAPER)}
-  ${MONO.text(ctx, s, x, 86, size, { fill: INK })}
-  <g clip-path="url(#fc)"><g class="caret">
-    <rect x="${r(x + tw - 0.5)}" y="56" width="${r(tw + 40)}" height="42" fill="${PAPER}"/>
-    <rect class="cur" x="${r(cx0)}" y="66" width="12" height="24" fill="${INK}"/>
-  </g></g>`;
+  <g class="code">
+    ${MONO.text(ctx, s, x, y + 6, size, { fill: INK })}
+    <g class="cv"><rect x="${r(x + tw - 0.5)}" y="${y - 14}" width="${r(tw + 24)}" height="26" fill="${PAPER}"/><rect class="blink" x="${r(x + tw + 3)}" y="${y - 10}" width="9" height="19" fill="${INK}"/></g>
+  </g>`;
   const style = `
-    .caret { animation:caret 7s infinite; }
-    .cur   { animation:blink 1.1s steps(1) infinite; }
-    @keyframes caret {
-      0%      { transform:translateX(-${r(tw)}px); animation-timing-function:steps(${n}, end); }
-      40%,85% { transform:translateX(0); animation-timing-function:steps(${n}, end); }
-      100%    { transform:translateX(-${r(tw)}px); }
-    }
+    .code  { animation:fade ${D}s linear infinite; }
+    @keyframes fade { 0%,90% { opacity:1; } 96%,100% { opacity:0; } }
+    .cv    { animation:cv ${D}s infinite; }
+    @keyframes cv { 0%,${pct(t0)}% { transform:translateX(-${r(tw)}px); animation-timing-function:steps(${n}, end); } ${pct(t1)}%,100% { transform:translateX(0); } }
+    .blink { animation:blink 1.1s steps(1) infinite; }
     @keyframes blink { 50% { opacity:0; } }`;
-  const defs = `<clipPath id="fc"><rect x="${r(x - 4)}" y="50" width="${r(tw + 30)}" height="56"/></clipPath>`;
-  write("panel-footer", W, H, { label: s, body, style, ctx, defs });
+  write("panel-footer", W, H, { label: s, body, style, ctx });
 }
