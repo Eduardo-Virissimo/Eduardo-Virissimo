@@ -26,48 +26,29 @@ STYLE = f"""
     .draw  {{ stroke-dasharray:1; animation:draw 2.8s {EASE} .15s backwards; }}
     .cur   {{ animation:blink 1.1s steps(1) infinite; }}
     .type  {{ animation:type 2.4s steps(40) .8s backwards; }}
-    .marq  {{ animation:marq 18s linear infinite; }}
     @keyframes draw   {{ from{{stroke-dashoffset:1}} }}
     @keyframes blink  {{ 50%{{opacity:0}} }}
     @keyframes type   {{ from{{clip-path:inset(0 100% 0 0)}} }}
-    @keyframes marq   {{ to{{transform:translateX(-50%)}} }}
     @media (prefers-reduced-motion: reduce) {{ * {{ animation:none !important; }} }}
   </style>"""
 
 
-# Do README antigo: o traço "fervendo" de nanquim e a granulação animada.
-# Só nos desenhos (espirais, raios, ilustrações); molduras e texto ficam limpos como no portfólio.
+# Do README antigo: o traço "fervendo" de nanquim, em todas as bordas, espirais e teclas.
+# Sem granulação: todo fundo é o mesmo INK, sem clarear um card mais que outro.
 FILTERS = """
-    <filter id="boil" filterUnits="userSpaceOnUse" x="-100" y="-100" width="1200" height="1000">
-      <feTurbulence type="fractalNoise" baseFrequency="0.026" numOctaves="2" seed="1" result="n">
-        <animate attributeName="seed" values="1;7;13;21" dur="0.6s" calcMode="discrete" repeatCount="indefinite"/>
-      </feTurbulence>
-      <feDisplacementMap in="SourceGraphic" in2="n" scale="2.6"/>
-    </filter>
     <filter id="tick" filterUnits="userSpaceOnUse" x="-100" y="-100" width="1200" height="1000">
       <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="1" result="n">
         <animate attributeName="seed" values="1;7;13;21" dur="0.5s" calcMode="discrete" repeatCount="indefinite"/>
       </feTurbulence>
       <feDisplacementMap in="SourceGraphic" in2="n" scale="4"/>
-    </filter>
-    <filter id="grain">
-      <feTurbulence type="fractalNoise" baseFrequency="0.9" seed="2">
-        <animate attributeName="seed" values="2;5;8;11;14" dur="0.5s" calcMode="discrete" repeatCount="indefinite"/>
-      </feTurbulence>
-      <feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .06 0"/>
-      <feComposite in2="SourceGraphic" operator="in"/>
     </filter>"""
 
-INKED = 'filter="url(#boil)"'
-# o "tique" das bordas da primeira versão, agora nas espirais: mais forte e mais rápido
 TICKING = 'filter="url(#tick)"'
 
 
-def svg(w, h, body, defs="", grain=False):
-    g = (f'\n  <rect x="5" y="5" width="{w - 10}" height="{h - 10}" rx="23" filter="url(#grain)" pointer-events="none"/>'
-         if grain else "")
+def svg(w, h, body, defs=""):
     return (f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}" '
-            f'font-family="{MONO}">\n  <defs>{FILTERS}{defs}\n  </defs>{STYLE}\n{body}{g}\n</svg>\n')
+            f'font-family="{MONO}">\n  <defs>{FILTERS}{defs}\n  </defs>{STYLE}\n{body}\n</svg>\n')
 
 
 def save(name, content):
@@ -258,18 +239,33 @@ with open(os.path.join(HERE, "..", "assets", "avatar.png"), "rb") as f:
 ah = 276
 aw = round(ah * 440 / 550)
 body += (f'  <image href="data:image/png;base64,{avatar}" x="36" y="{h - ah}" width="{aw}" height="{ah}"/>\n')
-save("header.svg", svg(w, h, body, defs, grain=True))
+save("header.svg", svg(w, h, body, defs))
 
-# ---------- botões de navegação ----------
-NAV = [("projetos", "projetos"), ("stack", "stack"), ("atividade", "atividade"), ("contato", "contato")]
-for slug, label in NAV:
+# ---------- botões (navegação e portfólio) ----------
+def arrow(x, y, s, sw=2.2, color=PAPER):
+    """Seta ↗ desenhada (a mesma dos cards do portfólio), canto superior esquerdo em (x, y)."""
+    k = s / 10
+    return (f'<path d="M{f1(x)} {f1(y + 10 * k)} L{f1(x + 10 * k)} {f1(y)} M{f1(x + 2 * k)} {f1(y)} '
+            f'H{f1(x + 10 * k)} V{f1(y + 8 * k)}" fill="none" stroke="{color}" stroke-width="{sw}" '
+            f'stroke-linecap="round" stroke-linejoin="round"/>')
+
+
+def button(name, label, external=False):
     w, h = 190, 52
+    cx = w / 2 - (9 if external else 0)
     body = (f'  <rect width="{w}" height="{h}" rx="16" fill="{INK}"/>\n'
             f'  <g {TICKING}><rect x="4" y="4" width="{w - 8}" height="{h - 8}" rx="13" fill="none" '
             f'stroke="{PAPER}" stroke-width="2"/></g>\n'
-            f'  <text x="{w / 2}" y="{h / 2 + 5}" text-anchor="middle" fill="{PAPER}" font-size="16" '
+            f'  <text x="{f1(cx)}" y="{h / 2 + 5}" text-anchor="middle" fill="{PAPER}" font-size="16" '
             f'font-weight="700">{label}</text>')
-    save(f"nav-{slug}.svg", svg(w, h, body))
+    if external:
+        body += "\n  " + arrow(cx + len(label) * 5 + 10, h / 2 - 6, 11, color=MINT)
+    save(f"{name}.svg", svg(w, h, body))
+
+
+for slug in ("projetos", "stack", "atividade", "contato"):
+    button(f"nav-{slug}", slug)
+button("btn-portfolio", "portfólio", external=True)
 
 # ---------- títulos de seção ----------
 SECTIONS = [("projetos", "Projetos em destaque"), ("stack", "Stack & ferramentas"),
@@ -299,37 +295,54 @@ for num, name, repo, tag, notch in PROJECTS:
     body += (f'  <text x="48" y="58" fill="{MUTE}" font-size="14">Eduardo-Virissimo/{repo}</text>\n'
              f'  {text_path(name, 46, 124, 56, tracking=-0.5)}\n'
              f'  <text x="48" y="170" fill="{MUTE}" font-size="16">&gt; {tag}<tspan fill="{MINT}" class="cur"> █</tspan></text>')
-    save(f"project-{num}.svg", svg(w, h, body, defs, grain=True))
+    save(f"project-{num}.svg", svg(w, h, body, defs))
 
-# ---------- painel da stack ----------
-w, h = 440, 740
-defs, body = card(w, h, "st", "tr")
-defs += f'\n    <clipPath id="marq"><rect x="24" y="{h - 70}" width="{w - 48}" height="40"/></clipPath>'
-body += (f'  <text x="36" y="48" fill="{MUTE}" font-size="15">~/stack.loop</text>\n'
-         f'  <line x1="24" y1="72" x2="{w - 24}" y2="72" stroke="{LINE}" stroke-width="2"/>\n')
-GROUPS = [("Front-end", [("HTML5", 0), ("CSS3 / Tailwind", 0), ("TypeScript / JS / React", 1)]),
+# ---------- stack: um card só, três colunas de "teclas" ----------
+# Cada tecnologia é uma tecla com borda tremendo; as de estudo avançado ficam em menta.
+GROUPS = [("Front-end", [("HTML5", 0), ("CSS3", 0), ("Tailwind", 0), ("TypeScript", 1), ("JavaScript", 1), ("React", 1)]),
           ("Back-end", [("Node.js", 1), ("PHP", 1), ("MySQL", 0)]),
-          ("Ferramentas", [("Git / GitHub", 0), ("Linux / Shell", 0), ("Docker / CI/CD", 0), ("Figma / UI/UX", 0)])]
-y = 126
-for title, items in GROUPS:
-    body += f"  {text_path(title, 36, y, 26, tracking=-0.2)}\n"
-    top, y = y + 12, y + 40
+          ("Ferramentas", [("Git", 0), ("GitHub", 0), ("Linux", 0), ("Shell", 0), ("Docker", 0), ("CI/CD", 0),
+                           ("Figma", 0), ("UI/UX", 0)])]
+w, col_w, key_h, gap = 1000, 272, 40, 12
+cols, bottom = [], 0
+for ci, (title, items) in enumerate(GROUPS):
+    x0 = 48 + ci * 312
+    out = [text_path(title, x0, 122, 30, tracking=-0.3)]
+    x, y = x0, 148
     for label, adv in items:
-        body += (f'  <path d="M46 {top} V{y - 11} Q46 {y - 6} 51 {y - 6} H62" fill="none" stroke="{DIM}" '
-                 f'stroke-width="2" stroke-linecap="round"/>\n'
-                 f'  <circle cx="69" cy="{y - 6}" r="4" fill="{MINT if adv else DIM}"/>\n'
-                 f'  <text x="84" y="{y}" fill="{PAPER}" font-size="18">{label}</text>\n')
-        top, y = y - 6, y + 32
-    y += 34
-phrase = "".join(f'{t} <tspan fill="{MINT}">✦</tspan> ' for t in ("FRONT-END", "BACK-END", "TOOLS", "ALWAYS LEARNING"))
-body += (f'  <circle cx="42" cy="{h - 100}" r="4" fill="{MINT}"/>\n'
-         f'  <text x="56" y="{h - 94}" fill="{MUTE}" font-size="15">estudos avançados</text>\n'
-         f'  <line x1="24" y1="{h - 70}" x2="{w - 24}" y2="{h - 70}" stroke="{PAPER}" stroke-width="1.8" {INKED}/>\n'
-         f'  <line x1="24" y1="{h - 30}" x2="{w - 24}" y2="{h - 30}" stroke="{PAPER}" stroke-width="1.8" {INKED}/>\n'
-         f'  <g clip-path="url(#marq)"><g class="marq">'
-         f'<text x="24" y="{h - 44}" fill="{PAPER}" font-size="14" font-weight="700" letter-spacing="3">{phrase}{phrase}</text>'
-         f'</g></g>')
-save("panel.svg", svg(w, h, body, defs, grain=True))
+        kw = len(label) * 9 + 36
+        if x + kw > x0 + col_w:
+            x, y = x0, y + key_h + gap
+        color = MINT if adv else PAPER
+        out.append(f'<g {TICKING}><rect x="{x}" y="{y}" width="{kw}" height="{key_h}" rx="{key_h // 2}" '
+                   f'fill="none" stroke="{color}" stroke-width="2"/></g>'
+                   f'<text x="{x + kw / 2}" y="{y + 25}" text-anchor="middle" fill="{color}" font-size="15">{label}</text>')
+        x += kw + 10
+    bottom = max(bottom, y + key_h)
+    cols.append(out)
+h = bottom + 84
+defs, body = card(w, h, "st", "tr")
+body += f'  <text x="48" y="58" fill="{MUTE}" font-size="14">~/stack</text>\n'
+for ci, out in enumerate(cols):
+    if ci:
+        lx = 48 + ci * 312 - 22
+        body += f'  <line x1="{lx}" y1="96" x2="{lx}" y2="{bottom}" stroke="{LINE}" stroke-width="2" stroke-linecap="round"/>\n'
+    body += "  " + "\n  ".join(out) + "\n"
+body += (f'  <g {TICKING}><rect x="48" y="{h - 52}" width="28" height="16" rx="8" fill="none" stroke="{MINT}" '
+         f'stroke-width="2"/></g>\n'
+         f'  <text x="88" y="{h - 39}" fill="{MUTE}" font-size="14">estudos avançados</text>')
+save("stack.svg", svg(w, h, body, defs))
+
+# ---------- contato: dois cards-link ----------
+CONTACTS = [("linkedin", "LinkedIn", "eduardo-teixeira-virissimo", "tr"),
+            ("email", "Email", "eduardoteixeiravirissimo@gmail.com", "bl")]
+for slug, name, handle, notch in CONTACTS:
+    w, h = 490, 150
+    defs, body = card(w, h, f"c-{slug}", notch)
+    body += (f'  {text_path(name, 40, 84, 40, tracking=-0.4)}\n'
+             f'  <text x="42" y="118" fill="{MUTE}" font-size="15">{handle}</text>\n'
+             f'  <g {TICKING}>{arrow(w - 66, 38, 22, sw=3.2, color=MINT)}</g>')
+    save(f"contact-{slug}.svg", svg(w, h, body, defs))
 
 # ---------- rodapé ----------
 w, h = 1000, 150
@@ -338,5 +351,5 @@ body += (f'  <g {TICKING}>{logo(466, 41, 68, 4.4)}</g>\n'
          f'  <text x="80" y="80" fill="{MUTE}" font-size="13" letter-spacing="4">THANKS FOR STOPPING BY</text>\n'
          f'  <text x="920" y="80" text-anchor="end" fill="{MUTE}" font-size="13" letter-spacing="4">'
          f'KEEP LOOPING <tspan fill="{MINT}">✦</tspan></text>')
-save("footer.svg", svg(w, h, body, defs, grain=True))
+save("footer.svg", svg(w, h, body, defs))
 print("ok")
