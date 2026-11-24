@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="340" height="300" viewBox="0 0 340 300" role="img" aria-label="">
+  <defs><path id="m6d" d="M40 0V530H117L120 412L110 414Q119 473 148 508Q178 542 224 542Q271 542 296 508Q322 474 328 408H318Q327 470 358 506Q390 542 438 542Q502 542 531 498Q560 454 560 352V0H476V340Q476 411 461 440Q446 468 414 468Q393 468 377 454Q361 441 352 412Q342 383 342 338V0H258V340Q258 408 244 438Q229 468 196 468Q175 468 159 454Q143 441 134 412Q124 383 124 338V0Z"/><path id="m61" d="M230 -12Q180 -12 140 6Q100 24 77 56Q54 89 54 132Q54 200 94 238Q135 275 222 292L400 328Q400 396 370 429Q339 462 282 462Q227 462 196 438Q165 413 153 367L64 374Q79 449 136 496Q192 542 282 542Q378 542 431 484Q484 427 484 326V106Q484 88 492 81Q500 74 516 74H550V0Q544 -1 531 -2Q518 -2 506 -2Q472 -2 448 9Q425 20 413 44Q401 69 400 108H416Q409 74 382 46Q356 19 316 4Q276 -12 230 -12ZM238 62Q292 62 328 80Q364 99 382 132Q400 166 400 210V256L238 224Q184 214 163 194Q142 173 142 140Q142 103 168 82Q193 62 238 62Z"/><path id="m69" d="M80 0V74H293V497L334 456H90V530H377V74H560V0H377H293ZM285 613V711H373V613Z"/><path id="m6e" d="M84 0V530H161L164 395L154 404Q164 451 190 482Q217 512 254 527Q291 542 332 542Q393 542 434 515Q474 488 495 442Q516 397 516 341V0H432V317Q432 391 403 430Q374 468 314 468Q273 468 240 450Q207 433 188 400Q168 366 168 317V0Z"/><path id="m66" d="M212 0V564Q212 635 248 672Q285 710 360 710H530V636H360Q329 636 312 616Q296 597 296 564V0ZM70 456V530H520V456Z"/><path id="m65" d="M306 -12Q231 -12 176 22Q122 56 92 118Q63 181 63 265Q63 349 92 411Q122 473 176 508Q229 542 302 542Q371 542 424 510Q477 477 507 415Q537 353 537 264V239H151Q156 154 196 111Q237 68 306 68Q358 68 392 92Q425 117 438 157L528 150Q507 79 448 34Q390 -12 306 -12ZM151 313H445Q439 390 400 426Q361 462 302 462Q241 462 202 424Q162 387 151 313Z"/><path id="m74" d="M378 0Q301 0 263 36Q225 72 225 146V654H309V146Q309 109 326 92Q343 74 378 74H520V0ZM50 456V530H520V456Z"/><path id="m2f" d="M108 -110 412 750H492L188 -110Z"/><path id="m75" d="M263 -12Q184 -12 137 42Q90 95 90 189V530H174V212Q174 135 202 98Q229 62 286 62Q348 62 384 102Q420 143 420 214V530H504V0H424V131L437 124Q421 59 376 24Q331 -12 263 -12Z"/><path id="m78" d="M54 0 249 272 64 530H162L301 330L437 530H537L353 270L546 0H448L301 214L154 0Z"/><path id="m70" d="M80 -150V530H158L160 410L148 416Q168 478 214 510Q261 542 322 542Q401 542 452 503Q502 464 526 401Q550 338 550 265Q550 192 526 129Q502 66 452 27Q401 -12 322 -12Q281 -12 246 2Q210 16 186 41Q161 66 152 100L164 114V-150ZM314 68Q383 68 422 120Q462 172 462 265Q462 358 422 410Q383 462 314 462Q268 462 234 440Q201 418 182 374Q164 330 164 265Q164 200 182 156Q200 112 234 90Q268 68 314 68Z"/></defs>
+  <style>
+    .g0 { stroke-dasharray:1 1; animation:g0 9s cubic-bezier(.16,1,.3,1) infinite; }
+    @keyframes g0 { 0%,3.3% { stroke-dashoffset:1; } 37.8%,100% { stroke-dashoffset:0; } }
+    .g1 { stroke-dasharray:1 1; animation:g1 9s cubic-bezier(.16,1,.3,1) infinite; }
+    @keyframes g1 { 0%,11.1% { stroke-dashoffset:1; } 33.3%,100% { stroke-dashoffset:0; } }
+    .g2 { stroke-dasharray:1 1; animation:g2 9s cubic-bezier(.16,1,.3,1) infinite; }
+    @keyframes g2 { 0%,18.9% { stroke-dashoffset:1; } 40%,100% { stroke-dashoffset:0; } }
+    .c0 { transform-box:fill-box; transform-origin:center; animation:c0 9s cubic-bezier(.16,1,.3,1) infinite; }
+    @keyframes c0 { 0%,3.3% { transform:scale(0); } 7.8%,100% { transform:scale(1); } }
+    .c1 { transform-box:fill-box; transform-origin:center; animation:c1 9s cubic-bezier(.16,1,.3,1) infinite; }
+    @keyframes c1 { 0%,10% { transform:scale(0); } 14.4%,100% { transform:scale(1); } }
+    .c2 { transform-box:fill-box; transform-origin:center; animation:c2 9s cubic-bezier(.16,1,.3,1) infinite; }
+    @keyframes c2 { 0%,16.7% { transform:scale(0); } 21.1%,100% { transform:scale(1); } }
+    .c3 { transform-box:fill-box; transform-origin:center; animation:c3 9s cubic-bezier(.16,1,.3,1) infinite; }
+    @keyframes c3 { 0%,15.6% { transform:scale(0); } 20%,100% { transform:scale(1); } }
+    .c4 { transform-box:fill-box; transform-origin:center; animation:c4 9s cubic-bezier(.16,1,.3,1) infinite; }
+    @keyframes c4 { 0%,23.3% { transform:scale(0); } 27.8%,100% { transform:scale(1); } }
+    .c5 { transform-box:fill-box; transform-origin:center; animation:c5 9s cubic-bezier(.16,1,.3,1) infinite; }
+    @keyframes c5 { 0%,24.4% { transform:scale(0); } 28.9%,100% { transform:scale(1); } }
+    .c6 { transform-box:fill-box; transform-origin:center; animation:c6 9s cubic-bezier(.16,1,.3,1) infinite; }
+    @keyframes c6 { 0%,32.2% { transform:scale(0); } 36.7%,100% { transform:scale(1); } }
+    .c7 { transform-box:fill-box; transform-origin:center; animation:c7 9s cubic-bezier(.16,1,.3,1) infinite; }
+    @keyframes c7 { 0%,34.4% { transform:scale(0); } 38.9%,100% { transform:scale(1); } }
+    .c8 { transform-box:fill-box; transform-origin:center; animation:c8 9s cubic-bezier(.16,1,.3,1) infinite; }
+    @keyframes c8 { 0%,41.1% { transform:scale(0); } 45.6%,100% { transform:scale(1); } }
+    .all { animation:all 9s linear infinite; }
+    @keyframes all { 0%,92% { opacity:1; } 97%,100% { opacity:0; } }
+    @media (prefers-reduced-motion: reduce) { * { animation:none !important; } }
+  </style>
+  <rect x="6" y="6" width="328" height="288" rx="16" fill="#f2f2f0" stroke="#d6d6d2" stroke-width="1.5"/>
+  <g class="all">
+    <path class="g0" pathLength="1" d="M40 150 H300" fill="none" stroke="#0b0b0b" stroke-width="3" stroke-linecap="round"/>
+    <path class="g1" pathLength="1" d="M90 150 C116 150 114 96 140 96 H196 C222 96 222 150 248 150" fill="none" stroke="#0b0b0b" stroke-width="3" stroke-linecap="round"/>
+    <path class="g2" pathLength="1" d="M150 150 C176 150 174 206 200 206 H244 C266 206 268 150 292 150" fill="none" stroke="#0b0b0b" stroke-width="3" stroke-linecap="round"/>
+    <circle class="c0" cx="40" cy="150" r="7.5" fill="#0b0b0b" stroke="#0b0b0b" stroke-width="3"/>
+    <circle class="c1" cx="90" cy="150" r="7.5" fill="#0b0b0b" stroke="#0b0b0b" stroke-width="3"/>
+    <circle class="c2" cx="150" cy="150" r="7.5" fill="#0b0b0b" stroke="#0b0b0b" stroke-width="3"/>
+    <circle class="c3" cx="140" cy="96" r="7.5" fill="#0b0b0b" stroke="#0b0b0b" stroke-width="3"/>
+    <circle class="c4" cx="196" cy="96" r="7.5" fill="#0b0b0b" stroke="#0b0b0b" stroke-width="3"/>
+    <circle class="c5" cx="200" cy="206" r="7.5" fill="#0b0b0b" stroke="#0b0b0b" stroke-width="3"/>
+    <circle class="c6" cx="244" cy="206" r="7.5" fill="#0b0b0b" stroke="#0b0b0b" stroke-width="3"/>
+    <circle class="c7" cx="248" cy="150" r="9" fill="#f2f2f0" stroke="#0b0b0b" stroke-width="3"/>
+    <circle class="c8" cx="292" cy="150" r="9" fill="#f2f2f0" stroke="#0b0b0b" stroke-width="3"/>
+    <g fill="#0b0b0b" transform="translate(36 182) scale(0.01300 -0.01300)"><use href="#m6d" x="0"/><use href="#m61" x="600"/><use href="#m69" x="1200"/><use href="#m6e" x="1800"/></g>
+    <g fill="#0b0b0b" transform="translate(140 76) scale(0.01300 -0.01300)"><use href="#m66" x="0"/><use href="#m65" x="600"/><use href="#m61" x="1200"/><use href="#m74" x="1800"/><use href="#m2f" x="2400"/><use href="#m75" x="3000"/><use href="#m69" x="3600"/></g>
+    <g fill="#0b0b0b" transform="translate(200 238) scale(0.01300 -0.01300)"><use href="#m66" x="0"/><use href="#m69" x="600"/><use href="#m78" x="1200"/><use href="#m2f" x="1800"/><use href="#m61" x="2400"/><use href="#m70" x="3000"/><use href="#m69" x="3600"/></g>
+  </g>
+</svg>
