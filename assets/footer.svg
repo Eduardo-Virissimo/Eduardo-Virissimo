@@ -1,44 +1,53 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="150" viewBox="0 0 1000 150" font-family="'JetBrains Mono','Fira Code',Consolas,'Courier New',monospace">
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="150" viewBox="0 0 1000 150" font-family="ui-monospace,'JetBrains Mono',SFMono-Regular,Menlo,Consolas,monospace">
   <defs>
-    <filter id="boil" x="-5%" y="-5%" width="110%" height="110%">
+    <filter id="boil" filterUnits="userSpaceOnUse" x="-100" y="-100" width="1200" height="1000">
+      <feTurbulence type="fractalNoise" baseFrequency="0.026" numOctaves="2" seed="1" result="n">
+        <animate attributeName="seed" values="1;7;13;21" dur="0.6s" calcMode="discrete" repeatCount="indefinite"/>
+      </feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="2.6"/>
+    </filter>
+    <filter id="tick" filterUnits="userSpaceOnUse" x="-100" y="-100" width="1200" height="1000">
       <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="1" result="n">
         <animate attributeName="seed" values="1;7;13;21" dur="0.5s" calcMode="discrete" repeatCount="indefinite"/>
       </feTurbulence>
-      <feDisplacementMap in="SourceGraphic" in2="n" scale="3"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="4"/>
     </filter>
     <filter id="grain">
       <feTurbulence type="fractalNoise" baseFrequency="0.9" seed="2">
-        <animate attributeName="seed" values="2;5;8;11;14" dur="0.4s" calcMode="discrete" repeatCount="indefinite"/>
+        <animate attributeName="seed" values="2;5;8;11;14" dur="0.5s" calcMode="discrete" repeatCount="indefinite"/>
       </feTurbulence>
-      <feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .07 0"/>
+      <feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .06 0"/>
+      <feComposite in2="SourceGraphic" operator="in"/>
     </filter>
+    <clipPath id="clip-ft"><rect x="5" y="5" width="990" height="140" rx="23"/></clipPath>
+    <pattern id="dots-ft" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="11" cy="11" r="1.1" fill="#f4f4f1" fill-opacity=".09"/></pattern>
+    <mask id="notch-ft"><rect x="-10" y="-10" width="1020" height="170" fill="#fff"/><rect x="48" y="142" width="28" height="12" fill="#000"/></mask>
   </defs>
   <style>
-    .spin  { transform-box:fill-box; transform-origin:center; animation:spin 12s linear infinite; }
-    .spinR { transform-box:fill-box; transform-origin:center; animation:spin 8s linear infinite reverse; }
-    .br    { transform-box:fill-box; transform-origin:center; animation:br 3s ease-in-out infinite; }
-    .wave  { animation:wave 2.4s ease-in-out infinite alternate; }
-    .cur   { animation:blink 1s steps(1) infinite; }
-    .in    { opacity:0; animation:in .4s steps(3) forwards; }
-    @keyframes spin  { to{transform:rotate(360deg)} }
-    @keyframes br    { 0%,100%{transform:scale(1)} 50%{transform:scale(.75)} }
-    @keyframes wave  { from{transform:translateY(-6px)} to{transform:translateY(6px)} }
-    @keyframes blink { 50%{opacity:0} }
-    @keyframes in    { to{opacity:1} }
+    .draw  { stroke-dasharray:1; animation:draw 2.8s cubic-bezier(.16,1,.3,1) .15s backwards; }
+    .pop   { transform-box:fill-box; transform-origin:center; animation:pop .6s cubic-bezier(.16,1,.3,1) 2.2s backwards; }
+    .cur   { animation:blink 1.1s steps(1) infinite; }
+    .vanish{ stroke-dasharray:1; animation:vanish 8s cubic-bezier(.65,0,.35,1) infinite; }
+    .scan  { animation:scan 4.8s steps(1) infinite; }
+    .spin  { transform-box:fill-box; transform-origin:center; animation:spin 20s linear infinite; }
+    .spinR { transform-box:fill-box; transform-origin:center; animation:spin 12s linear infinite reverse; }
+    .type  { animation:type 2.4s steps(40) .8s backwards; }
+    .marq  { animation:marq 18s linear infinite; }
+    @keyframes draw   { from{stroke-dashoffset:1} }
+    @keyframes pop    { from{opacity:0;transform:scale(.2)} }
+    @keyframes blink  { 50%{opacity:0} }
+    @keyframes spin   { to{transform:rotate(360deg)} }
+    @keyframes type   { from{clip-path:inset(0 100% 0 0)} }
+    @keyframes marq   { to{transform:translateX(-50%)} }
+    @keyframes vanish { 0%,30%{stroke-dashoffset:0} 60%,68%{stroke-dashoffset:-1} 100%{stroke-dashoffset:-2} }
+    @keyframes scan   { 0%{transform:translateY(0)} 25%{transform:translateY(34px)} 50%{transform:translateY(68px)} 75%{transform:translateY(34px)} }
+    @media (prefers-reduced-motion: reduce) { * { animation:none !important; } }
   </style>
-  <rect width="1000" height="150" fill="#000"/>
-
-  <line x1="20" y1="20" x2="980" y2="20" stroke="#fff" stroke-width="1.8" filter="url(#boil)"/>
-  <g transform="translate(500 82)" fill="none" stroke="#fff" filter="url(#boil)">
-    <g class="spin" stroke-width="2.5" stroke-linecap="round">
-      <line x1="0" y1="-50" x2="0" y2="-38"/><line x1="0" y1="50" x2="0" y2="38"/>
-      <line x1="-50" y1="0" x2="-38" y2="0"/><line x1="50" y1="0" x2="38" y2="0"/>
-      <line x1="35" y1="35" x2="27" y2="27"/><line x1="-35" y1="-35" x2="-27" y2="-27"/>
-      <line x1="35" y1="-35" x2="27" y2="-27"/><line x1="-35" y1="35" x2="-27" y2="27"/>
-    </g>
-    <g class="br"><circle r="22" stroke-width="2"/><circle r="8" fill="#fff"/></g>
-  </g>
-  <text x="80" y="90" fill="#9a9a9a" font-size="14" letter-spacing="4">THANKS FOR STOPPING BY</text>
-  <text x="920" y="90" text-anchor="end" fill="#9a9a9a" font-size="14" letter-spacing="4">KEEP LOOPING ✦</text>
-  <rect width="1000" height="150" filter="url(#grain)"/>
+  <rect x="5" y="5" width="990" height="140" rx="23" fill="#08080a"/>
+  <rect width="1000" height="150" fill="url(#dots-ft)" clip-path="url(#clip-ft)"/>
+  <g filter="url(#tick)"><rect x="5" y="5" width="990" height="140" rx="23" fill="none" stroke="#f4f4f1" stroke-width="3" mask="url(#notch-ft)"/></g>
+  <g filter="url(#tick)"><g transform="translate(466 41) scale(0.6800)" fill="none" stroke="#f4f4f1" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 10 L83 10 Q90 10 90 17 L90 83 Q90 90 83 90 L17 90 Q10 90 10 83 L10 32 Q10 25 17 25 L68 25 Q75 25 75 32 L75 68 Q75 75 68 75 L32 75 Q25 75 25 68 L25 47 Q25 40 32 40 L53 40 Q60 40 60 47 L60 53 Q60 60 53 60 L40 60"/><circle cx="40" cy="60" r="5.8" fill="#c2ebd0" stroke="none"/></g></g>
+  <text x="80" y="80" fill="#8e8e89" font-size="13" letter-spacing="4">THANKS FOR STOPPING BY</text>
+  <text x="920" y="80" text-anchor="end" fill="#8e8e89" font-size="13" letter-spacing="4">KEEP LOOPING <tspan fill="#c2ebd0">✦</tspan></text>
+  <rect x="5" y="5" width="990" height="140" rx="23" filter="url(#grain)" pointer-events="none"/>
 </svg>
