@@ -24,22 +24,13 @@ with open(os.path.join(HERE, "glyphs.json"), encoding="utf-8") as f:
 STYLE = f"""
   <style>
     .draw  {{ stroke-dasharray:1; animation:draw 2.8s {EASE} .15s backwards; }}
-    .pop   {{ transform-box:fill-box; transform-origin:center; animation:pop .6s {EASE} 2.2s backwards; }}
     .cur   {{ animation:blink 1.1s steps(1) infinite; }}
-    .vanish{{ stroke-dasharray:1; animation:vanish 8s cubic-bezier(.65,0,.35,1) infinite; }}
-    .scan  {{ animation:scan 4.8s steps(1) infinite; }}
-    .spin  {{ transform-box:fill-box; transform-origin:center; animation:spin 20s linear infinite; }}
-    .spinR {{ transform-box:fill-box; transform-origin:center; animation:spin 12s linear infinite reverse; }}
     .type  {{ animation:type 2.4s steps(40) .8s backwards; }}
     .marq  {{ animation:marq 18s linear infinite; }}
     @keyframes draw   {{ from{{stroke-dashoffset:1}} }}
-    @keyframes pop    {{ from{{opacity:0;transform:scale(.2)}} }}
     @keyframes blink  {{ 50%{{opacity:0}} }}
-    @keyframes spin   {{ to{{transform:rotate(360deg)}} }}
     @keyframes type   {{ from{{clip-path:inset(0 100% 0 0)}} }}
     @keyframes marq   {{ to{{transform:translateX(-50%)}} }}
-    @keyframes vanish {{ 0%,30%{{stroke-dashoffset:0}} 60%,68%{{stroke-dashoffset:-1}} 100%{{stroke-dashoffset:-2}} }}
-    @keyframes scan   {{ 0%{{transform:translateY(0)}} 25%{{transform:translateY(34px)}} 50%{{transform:translateY(68px)}} 75%{{transform:translateY(34px)}} }}
     @media (prefers-reduced-motion: reduce) {{ * {{ animation:none !important; }} }}
   </style>"""
 
@@ -254,23 +245,19 @@ def card(w, h, uid, notch="tr", rx=28, dots=True):
 # ---------- header ----------
 w, h = 1000, 300
 defs, body = card(w, h, "hd", "tr")
-body += f'  <g {TICKING}>{spiral(184, 76, 58, cls="draw")}</g>\n'
-body += "  " + text_path("Eduardo", 336, 146, 100, tracking=-1) + "\n"
-body += f'  <text x="340" y="194" fill="{MUTE}" font-size="15" letter-spacing="5">DEV. FULL STACK JÚNIOR</text>\n'
-body += (f'  <g class="type"><text x="340" y="236" fill="{PAPER}" font-size="16">&gt; front · back · tools · always looping'
+body += f'  <g {TICKING}>{spiral(176, w - 60 - 176, (h - 176) // 2, cls="draw")}</g>\n'
+tx = 300
+body += "  " + text_path("Eduardo", tx - 4, 146, 100, tracking=-1) + "\n"
+body += f'  <text x="{tx}" y="194" fill="{MUTE}" font-size="15" letter-spacing="5">DEV. FULL STACK</text>\n'
+body += (f'  <g class="type"><text x="{tx}" y="236" fill="{PAPER}" font-size="16">&gt; front · back · tools · always looping'
          f'<tspan fill="{MINT}" class="cur"> █</tspan></text></g>\n')
-# avatar (assets/avatar.jpg, 4:5) numa moldura com notch
-with open(os.path.join(HERE, "..", "assets", "avatar.jpg"), "rb") as f:
+# avatar (assets/avatar.png, fundo recortado), grande e sem moldura, à esquerda,
+# desenhado por cima da borda de baixo: o moletom "senta" na borda do header.
+with open(os.path.join(HERE, "..", "assets", "avatar.png"), "rb") as f:
     avatar = base64.b64encode(f.read()).decode()
-aw, ah = 168, 210
-ax, ay = w - 44 - aw, (h - ah) // 2
-defs += (f'\n    <clipPath id="av"><rect x="{ax}" y="{ay}" width="{aw}" height="{ah}" rx="22"/></clipPath>'
-         f'\n    <mask id="av-notch"><rect x="0" y="0" width="{w}" height="{h}" fill="#fff"/>'
-         f'<rect x="{ax - 4}" y="{ay + ah - 52}" width="10" height="28" fill="#000"/></mask>')
-body += (f'  <image href="data:image/jpeg;base64,{avatar}" x="{ax}" y="{ay}" width="{aw}" height="{ah}" '
-         f'clip-path="url(#av)"/>\n'
-         f'  <g {TICKING}><rect x="{ax}" y="{ay}" width="{aw}" height="{ah}" rx="22" fill="none" '
-         f'stroke="{PAPER}" stroke-width="3" mask="url(#av-notch)"/></g>')
+ah = 276
+aw = round(ah * 440 / 550)
+body += (f'  <image href="data:image/png;base64,{avatar}" x="36" y="{h - ah}" width="{aw}" height="{ah}"/>\n')
 save("header.svg", svg(w, h, body, defs, grain=True))
 
 # ---------- botões de navegação ----------
@@ -303,58 +290,19 @@ for slug, title in SECTIONS:
 
 
 # ---------- banners de projeto ----------
-def art_vanish():
-    # a espiral some em direção ao centro e volta: limpeza que mostra antes o que vai sumir
-    return f"<g {TICKING}>{spiral(150, 776, 35, cls='vanish')}</g>"
-
-
-def art_query():
-    # tabela de resultado; o realce menta percorre as linhas como uma consulta
-    out = []
-    x0, y0, cw, ch, gx, gy = 704, 40, 58, 24, 10, 10
-    for row in range(4):
-        for col in range(4):
-            stroke, sw = (PAPER, 2.5) if row == 0 else (DIM, 2)
-            out.append(f'<rect x="{x0 + col * (cw + gx)}" y="{y0 + row * (ch + gy)}" width="{cw}" height="{ch}" '
-                       f'rx="8" fill="none" stroke="{stroke}" stroke-width="{sw}"/>')
-    rw = 4 * cw + 3 * gx + 12
-    out.append(f'<rect class="scan" x="{x0 - 6}" y="{y0 + ch + gy - 6}" width="{rw}" height="{ch + 12}" rx="12" '
-               f'fill="none" stroke="{MINT}" stroke-width="3"/>')
-    out.append(f'<line x1="{x0}" y1="{y0 + 4 * (ch + gy) + 14}" x2="{x0 + 120}" y2="{y0 + 4 * (ch + gy) + 14}" '
-               f'stroke="{DIM}" stroke-width="3" stroke-linecap="round"/>')
-    return "\n  ".join(out)
-
-
-def art_pages():
-    # páginas empilhadas: a URL vira PDF
-    out = []
-    for i, col in enumerate([DIM, MUTE]):
-        out.append(f'<rect x="{772 + i * 18}" y="{30 + i * 14}" width="124" height="150" rx="16" '
-                   f'fill="{INK}" stroke="{col}" stroke-width="2.5"/>')
-    fx, fy = 808, 58
-    out.append(f'<rect x="{fx}" y="{fy}" width="124" height="150" rx="16" fill="{INK}" stroke="{PAPER}" stroke-width="3"/>')
-    for j, ln in enumerate([84, 64, 76, 48]):
-        out.append(f'<line x1="{fx + 20}" y1="{fy + 30 + j * 20}" x2="{fx + 20 + ln}" y2="{fy + 30 + j * 20}" '
-                   f'stroke="{PAPER if j == 0 else DIM}" stroke-width="5" stroke-linecap="round"/>')
-    out.append(f'<rect x="{fx + 20}" y="{fy + 112}" width="44" height="22" rx="8" fill="{MINT}"/>')
-    out.append(f'<text x="{fx + 42}" y="{fy + 128}" text-anchor="middle" fill="{INK}" font-size="12" font-weight="700">PDF</text>')
-    return "\n  ".join(out)
-
-
-PROJECTS = [("01", "Vanish", "vanish", "electron · typescript", art_vanish, "tr"),
-            ("02", "Analyst SQL", "analyst-sql", "next.js · typescript · mysql", art_query, "rb"),
-            ("03", "PrintScream", "PrintScream", "typescript · puppeteer", art_pages, "bl")]
-for num, name, repo, tag, art, notch in PROJECTS:
+PROJECTS = [("01", "Vanish", "vanish", "electron · typescript", "tr"),
+            ("02", "Analyst SQL", "analyst-sql", "next.js · typescript · mysql", "rb"),
+            ("03", "PrintScream", "PrintScream", "typescript · puppeteer", "bl")]
+for num, name, repo, tag, notch in PROJECTS:
     w, h = 1000, 220
     defs, body = card(w, h, f"p{num}", notch)
     body += (f'  <text x="48" y="58" fill="{MUTE}" font-size="14">Eduardo-Virissimo/{repo}</text>\n'
              f'  {text_path(name, 46, 124, 56, tracking=-0.5)}\n'
-             f'  <text x="48" y="170" fill="{MUTE}" font-size="16">&gt; {tag}<tspan fill="{MINT}" class="cur"> █</tspan></text>\n'
-             f'  {art() if art is art_vanish else f"<g {INKED}>{art()}</g>"}')
+             f'  <text x="48" y="170" fill="{MUTE}" font-size="16">&gt; {tag}<tspan fill="{MINT}" class="cur"> █</tspan></text>')
     save(f"project-{num}.svg", svg(w, h, body, defs, grain=True))
 
 # ---------- painel da stack ----------
-w, h = 600, 740
+w, h = 440, 740
 defs, body = card(w, h, "st", "tr")
 defs += f'\n    <clipPath id="marq"><rect x="24" y="{h - 70}" width="{w - 48}" height="40"/></clipPath>'
 body += (f'  <text x="36" y="48" fill="{MUTE}" font-size="15">~/stack.loop</text>\n'
@@ -363,11 +311,7 @@ GROUPS = [("Front-end", [("HTML5", 0), ("CSS3 / Tailwind", 0), ("TypeScript / JS
           ("Back-end", [("Node.js", 1), ("PHP", 1), ("MySQL", 0)]),
           ("Ferramentas", [("Git / GitHub", 0), ("Linux / Shell", 0), ("Docker / CI/CD", 0), ("Figma / UI/UX", 0)])]
 y = 126
-for gi, (title, items) in enumerate(GROUPS):
-    # uma espiral por grupo, alternando espelhada (como o par espiral/mirror do portfólio)
-    sx, sy, ss = 448, y - 26, 104
-    flip = f' transform="translate({2 * sx + ss} 0) scale(-1 1)"' if gi % 2 else ""
-    body += f"  <g{flip}>{spiral(ss, sx, sy)}</g>\n"
+for title, items in GROUPS:
     body += f"  {text_path(title, 36, y, 26, tracking=-0.2)}\n"
     top, y = y + 12, y + 40
     for label, adv in items:

@@ -1,6 +1,6 @@
 <!-- ═══════════════════════ HERO ═══════════════════════ -->
 <div align="center">
-  <img src="./assets/header.svg" width="100%" alt="Eduardo — dev. full stack júnior"/>
+  <img src="./assets/header.svg" width="100%" alt="Eduardo — dev. full stack"/>
 </div>
 
 <br/>
