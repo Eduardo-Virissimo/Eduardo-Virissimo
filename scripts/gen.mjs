@@ -83,6 +83,72 @@ const LOGO = "M10 10 L83 10 Q90 10 90 17 L90 83 Q90 90 83 90 L17 90 Q10 90 10 83
   "L68 25 Q75 25 75 32 L75 68 Q75 75 68 75 L32 75 Q25 75 25 68 L25 47 Q25 40 32 40 L53 40 " +
   "Q60 40 60 47 L60 53 Q60 60 53 60 L40 60";
 
+// ---------- player de música ----------
+// Entra uma vez quando a página abre: cai lá de cima passando por cima do perfil.md (que espreme) e
+// aterrissa no lugar do grafo de git, esmagando o grafo pra baixo. O hero e o grafo são imagens
+// separadas, então cada uma desenha a sua parte da queda com o mesmo tempo.
+// Sem animação (prefers-reduced-motion) fica direto o estado final.
+const SONG = { title: "Be Yourself", artist: "Audioslave", len: 273, at: 72 };   // 4:33, começa em 1:12
+// capa do álbum já reduzida (scripts/capa.jpg), embutida no SVG: imagem dentro de <img> não carrega arquivo externo
+const CAPA = "data:image/jpeg;base64," + fs.readFileSync(path.join(HERE, "capa.jpg")).toString("base64");
+const PW = 328, PH = 124;                   // tamanho do player
+const PX = 666, PY = 376;                   // onde ele termina, em coordenadas da página (1000 de largura)
+const FALL = { delay: 0.9, dur: 1.5, from: -150 };
+// queda em coordenadas da página; a imagem subtrai o próprio deslocamento vertical
+const fallKeys = (oy) => {
+  const y = (v) => `translateY(${r(v - oy)}px)`;
+  return `0% { transform:${y(FALL.from)}; animation-timing-function:cubic-bezier(.55,0,1,.45); }
+      66.7% { transform:${y(PY)}; animation-timing-function:ease-out; }
+      78% { transform:${y(PY - 12)}; animation-timing-function:ease-in; }
+      88% { transform:${y(PY)}; animation-timing-function:ease-out; }
+      94% { transform:${y(PY - 3)}; animation-timing-function:ease-in; }
+      100% { transform:${y(PY)}; }`;
+};
+const mmss = (t) => `${Math.floor(t / 60)}:${String(t % 60).padStart(2, "0")}`;
+// m:ss contando: cada dígito é uma fita vertical que sobe um número por vez, recortada numa janelinha
+function clock(ctx) {
+  const x = 122, y = 93, size = 10, adv = MONO.width("0", size), step = 12;
+  const tape = (cls, digits, cx) => `<g clip-path="url(#clk)"><g class="${cls}">${digits.map((d, i) => MONO.text(ctx, String(d), cx, y + i * step, size, { fill: MUTE })).join("")}</g></g>`;
+  return `<clipPath id="clk"><rect x="${x - 1}" y="${y - 9}" width="${r(adv * 4 + 2)}" height="11"/></clipPath>
+    ${tape("dm", [0, 1, 2, 3, 4], x)}${MONO.text(ctx, ":", x + adv, y, size, { fill: MUTE })}${tape("dt", [0, 1, 2, 3, 4, 5], x + adv * 2)}${tape("du", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], x + adv * 3)}`;
+}
+function player(ctx) {
+  const tSize = Math.min(16, 16 * 170 / SANS.width(SONG.title, 16));
+  const eq = [0, 1, 2, 3].map((i) => `<rect class="eq" style="animation-duration:${(0.7 + i * 0.17).toFixed(2)}s;animation-delay:-${(i * 0.23).toFixed(2)}s" x="${294 + i * 6}" y="28" width="3.5" height="14" rx="1.5" fill="${PAPER}"/>`).join("");
+  return `<rect x="5" y="8" width="${PW}" height="${PH}" rx="14" fill="#000" fill-opacity=".22"/>
+    <rect width="${PW}" height="${PH}" rx="14" fill="${INK}" stroke="${LINE}" stroke-width="1.5"/>
+    <clipPath id="capa"><rect x="14" y="16" width="92" height="92" rx="8"/></clipPath>
+    <image href="${CAPA}" x="14" y="16" width="92" height="92" preserveAspectRatio="xMidYMid slice" clip-path="url(#capa)"/>
+    ${SANS.text(ctx, SONG.title, 122, 42, tSize)}
+    ${SANS.text(ctx, SONG.artist, 122, 62, 13, { fill: MUTE })}
+    ${eq}
+    <rect x="122" y="74" width="192" height="4" rx="2" fill="#2a2a2e"/>
+    <rect class="prog" x="122" y="74" width="192" height="4" rx="2" fill="${PAPER}"/>
+    <circle class="knob" cx="122" cy="76" r="5" fill="${PAPER}"/>
+    ${clock(ctx)}${MONO.text(ctx, mmss(SONG.len), 314, 93, 10, { fill: MUTE, anchor: "end" })}
+    <g fill="${PAPER}">
+      <path d="M181 101 V113" stroke="${PAPER}" stroke-width="2.2" stroke-linecap="round"/><path d="M193 101 L184 107 L193 113Z"/>
+      <circle cx="218" cy="107" r="11"/><rect x="213.5" y="102" width="3" height="10" rx="1" fill="${INK}"/><rect x="219.5" y="102" width="3" height="10" rx="1" fill="${INK}"/>
+      <path d="M255 101 V113" stroke="${PAPER}" stroke-width="2.2" stroke-linecap="round"/><path d="M243 101 L252 107 L243 113Z"/>
+    </g>`;
+}
+const PLAYER_STYLE = `
+    .eq    { transform-box:fill-box; transform-origin:center bottom; animation-name:eq; animation-timing-function:ease-in-out; animation-iteration-count:infinite; animation-direction:alternate; }
+    .prog  { transform-box:fill-box; transform-origin:left center; transform:scaleX(${r((SONG.at / SONG.len) * 1000) / 1000}); animation:prog ${SONG.len}s linear -${SONG.at}s infinite; }
+    .knob  { transform:translateX(${r((SONG.at / SONG.len) * 192)}px); animation:knob ${SONG.len}s linear -${SONG.at}s infinite; }
+    .du    { transform:translateY(-${(SONG.at % 10) * 12}px); animation:du 10s steps(10, end) -${SONG.at % 10}s infinite; }
+    .dt    { transform:translateY(-${Math.floor((SONG.at % 60) / 10) * 12}px); animation:dt 60s steps(6, end) -${SONG.at % 60}s infinite; }
+    .dm    { transform:translateY(-${Math.floor(SONG.at / 60) * 12}px); animation:dm ${SONG.len}s step-end -${SONG.at}s infinite; }
+    @keyframes eq   { from { transform:scaleY(.25); } to { transform:scaleY(1); } }
+    @keyframes prog { from { transform:scaleX(0); } to { transform:scaleX(1); } }
+    @keyframes knob { from { transform:translateX(0); } to { transform:translateX(192px); } }
+    @keyframes du   { from { transform:translateY(0); } to { transform:translateY(-120px); } }
+    @keyframes dt   { from { transform:translateY(0); } to { transform:translateY(-72px); } }
+    @keyframes dm   { ${[0, 1, 2, 3, 4].map((m) => `${r((m * 60 / SONG.len) * 100)}% { transform:translateY(-${m * 12}px); }`).join(" ")} 100% { transform:translateY(-48px); } }`;
+const fallAnim = (cls, oy) => `
+    .${cls} { animation:${cls} ${FALL.dur}s ${FALL.delay}s both; }
+    @keyframes ${cls} { ${fallKeys(oy)} }`;
+
 // ---------- hero ----------
 {
   // perfil.md: o código-fonte é digitado (cursor acompanhando), some, e entra a versão renderizada.
@@ -156,8 +222,13 @@ const LOGO = "M10 10 L83 10 Q90 10 90 17 L90 83 Q90 90 83 90 L17 90 Q10 90 10 83
     ${code}${carets}
   </g>
   ${rendered}`;
+  const heroBody = `  <g class="squish">${body}</g>
+  <g transform="translate(${PX} 0)"><g class="fallh" style="transform:translateY(${H + 40}px)">${player(ctx)}</g></g>`;
+  const heroStyle = style + PLAYER_STYLE + fallAnim("fallh", 0) + `
+    .squish { transform-origin:${W / 2}px ${H / 2}px; animation:squish ${FALL.dur}s ${FALL.delay}s both; }
+    @keyframes squish { 0%,22% { transform:scale(1,1); } 38% { transform:scale(.99,.955); } 50% { transform:scale(1.004,1.012); } 60% { transform:scale(.999,.996); } 68%,100% { transform:scale(1,1); } }`;
   write("panel-hero", W, H, {
-    label: "Eduardo. dev. full stack. Formado em Análise e Desenvolvimento de Sistemas.", body, style, ctx,
+    label: "Eduardo. dev. full stack. Formado em Análise e Desenvolvimento de Sistemas.", body: heroBody, style: heroStyle, ctx,
     defs: `<clipPath id="pc"><rect x="20" y="60" width="${W - 40}" height="${H - 72}"/></clipPath>`,
   });
 }
@@ -226,7 +297,7 @@ const LOGO = "M10 10 L83 10 Q90 10 90 17 L90 83 Q90 90 83 90 L17 90 Q10 90 10 83
     ["M150 150 C176 150 174 206 200 206 H244 C266 206 268 150 292 150", 1.7, 3.6],
   ];
   const commits = [[40, 150, 0.3], [90, 150, 0.9], [150, 150, 1.5], [140, 96, 1.4], [196, 96, 2.1], [200, 206, 2.2], [244, 206, 2.9], [248, 150, 3.1], [292, 150, 3.7]];
-  let style = "", body = `  ${panel(W, H, PAPER)}\n  <g class="all">`;
+  let style = "", body = `  <g class="gsq">${panel(W, H, PAPER)}</g>\n  <g class="ggr"><g class="all">`;
   lines.forEach(([d, s, e], i) => {
     body += `\n    <path class="g${i}" pathLength="1" d="${d}" ${ink}/>`;
     style += `
@@ -244,11 +315,18 @@ const LOGO = "M10 10 L83 10 Q90 10 90 17 L90 83 Q90 90 83 90 L17 90 Q10 90 10 83
     ${MONO.text(ctx, "main", 36, 182, 13, { fill: INK })}
     ${MONO.text(ctx, "feat/ui", 140, 76, 13, { fill: INK })}
     ${MONO.text(ctx, "fix/api", 200, 238, 13, { fill: INK })}
-  </g>`;
+  </g></g>
+  <g transform="translate(${PX - 660} 0)"><g class="fallg" style="transform:translateY(${PY - 370}px)">${player(ctx)}</g></g>`;
   style += `
     .all { animation:all ${D}s linear infinite; }
     @keyframes all { 0%,92% { opacity:1; } 97%,100% { opacity:0; } }`;
-  write("panel-git", W, H, { label: "", body, style, ctx });
+  const top = PY - 370 + PH + 6, k = (H - 6 - top) / (H - 12);
+  style += PLAYER_STYLE + fallAnim("fallg", 370) + `
+    .gsq { transform-origin:${W / 2}px ${H - 6}px; transform:scaleY(${r(k * 1000) / 1000}); animation:gsq ${FALL.dur}s ${FALL.delay}s both; }
+    @keyframes gsq { 0%,64.8% { transform:scaleY(1); } 67% { transform:scaleY(${r(k * 0.9 * 1000) / 1000}); } 80% { transform:scaleY(${r(k * 1.05 * 1000) / 1000}); } 90%,100% { transform:scaleY(${r(k * 1000) / 1000}); } }
+    .ggr { transform-origin:168px 152px; transform:translate(0,${r((top + H - 6) / 2 - 152)}px) scale(.68); animation:ggr ${FALL.dur}s ${FALL.delay}s both; }
+    @keyframes ggr { 0%,64.8% { transform:translate(0,0) scale(1); } 67% { transform:translate(0,${r((top + H - 6) / 2 - 152 + 6)}px) scale(.74,.56); } 80% { transform:translate(0,${r((top + H - 6) / 2 - 152 - 2)}px) scale(.66,.74); } 90%,100% { transform:translate(0,${r((top + H - 6) / 2 - 152)}px) scale(.68); } }`;
+  write("panel-git", W, H, { label: `Tocando agora: ${SONG.title}, de ${SONG.artist}.`, body, style, ctx });
 }
 
 // ---------- minimapa ----------
