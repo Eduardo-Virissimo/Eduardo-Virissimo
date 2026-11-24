@@ -169,13 +169,13 @@ const fallAnim = (cls, oy) => `
     [["Formado em Análise e Desenvolvimento de Sistemas", SOFT]],
   ];
   const ys = [140, 182, 224, 266];
-  let t = 0.6;
+  let t = 0.4;
   const timing = src.map((toks) => {
-    const n = toks.map((x) => x[0]).join("").length, s = t, e = t + 0.035 * n + 0.15;
-    t = e + 0.3;
+    const n = toks.map((x) => x[0]).join("").length, s = t, e = t + 0.018 * n + 0.15;
+    t = e + 0.15;
     return [s, e, n];
   });
-  const SWAP = t + 1.2;                       // fim da digitação + pausa: troca pro preview
+  const SWAP = t + 0.5;                       // fim da digitação + pausa: troca pro preview
   const OUT = D - 1;                          // começa a sumir pra recomeçar o loop
 
   let code = "", carets = "", nums = "", style = `${IN}
@@ -241,7 +241,7 @@ const fallAnim = (cls, oy) => `
 
 // ---------- sobre ----------
 {
-  // janela de editor: um objeto "eduardo" digitado linha a linha, em loop
+  // janela de editor: um objeto "eduardo" digitado linha a linha uma vez só, e fica pra ser lido
   const ctx = new Map(), W = 660, H = 300, size = 15.5, lh = 28, x0 = 76, y0 = 98;
   const K = MUTE, S = "#c9c9c4", P = PAPER;                     // palavra-chave/pontuação, string, chave
   const lines = [
@@ -255,33 +255,31 @@ const fallAnim = (cls, oy) => `
   ];
   // Cada linha tem uma "capa" da cor do fundo que anda junto com o cursor, um caractere por vez,
   // escondendo o que ainda não foi digitado. O cursor só aparece na linha que está sendo digitada.
-  const D = 12, pct = (t) => r((t / D) * 100);
   const timing = [];
   let t = 0.5;
   for (const toks of lines) {
-    const n = toks.map((x) => x[0]).join("").length, e = t + 0.03 * n + 0.15;
+    const n = toks.map((x) => x[0]).join("").length, e = t + 0.018 * n + 0.12;
     timing.push([t, e, n]);
-    t = e + 0.25;
+    t = e + 0.15;
   }
+  const D = +r(t), pct = (t) => r((t / D) * 100);   // a animação toda dura só a digitação
   let body = `  ${win(ctx, W, H, "sobre.ts")}`, code = "", carets = "";
   let style = `
-    .code { animation:fade ${D}s linear infinite; }
-    @keyframes fade { 0%,90% { opacity:1; } 96%,100% { opacity:0; } }
     .blink { animation:blink 1.1s steps(1) infinite; }
     @keyframes blink { 50% { opacity:0; } }`;
   lines.forEach((toks, i) => {
     const y = y0 + i * lh, [s, e, n] = timing[i], last = i === lines.length - 1;
     let x = x0;
     for (const [tx, c] of toks) { code += MONO.text(ctx, tx, x, y, size, { fill: c }); x += MONO.width(tx, size); }
-    const w = x - x0, next = last ? 96 : pct(timing[i + 1][0]);
+    const w = x - x0, next = last ? 100 : pct(timing[i + 1][0]);
     body += `\n  ${MONO.text(ctx, String(i + 1), 50, y, 12, { fill: "#4a4a48", anchor: "end" })}`;
     carets += `\n    <g class="cv${i}"><rect x="${r(x - 0.5)}" y="${y - 18}" width="${r(w + 24)}" height="25" fill="${INK}"/>` +
       `<g class="cu${i}"><rect${last ? ' class="blink"' : ""} x="${r(x + 3)}" y="${y - 14}" width="9" height="18" fill="${PAPER}"/></g></g>`;
     style += `
-    .cv${i} { animation:cv${i} ${D}s infinite; }
+    .cv${i} { animation:cv${i} ${D}s both; }
     @keyframes cv${i} { 0%,${pct(s)}% { transform:translateX(-${r(w)}px); animation-timing-function:steps(${n}, end); } ${pct(e)}%,100% { transform:translateX(0); } }
-    .cu${i} { opacity:${last ? 1 : 0}; animation:cu${i} ${D}s step-end infinite; }
-    @keyframes cu${i} { 0% { opacity:0; } ${pct(s)}% { opacity:1; } ${next}% { opacity:0; } 100% { opacity:0; } }`;
+    .cu${i} { opacity:${last ? 1 : 0}; animation:cu${i} ${D}s step-end both; }
+    @keyframes cu${i} { 0% { opacity:0; } ${pct(s)}% { opacity:1; } ${next}% { opacity:${last ? 1 : 0}; } 100% { opacity:${last ? 1 : 0}; } }`;
   });
   body += `\n  <g class="code" clip-path="url(#ac)">${code}${carets}\n  </g>`;
   write("panel-about", W, H, {
