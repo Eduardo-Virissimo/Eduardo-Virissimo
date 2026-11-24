@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="260" viewBox="0 0 1000 260" font-family="'JetBrains Mono','Fira Code',Consolas,'Courier New',monospace">
+  <defs>
+    <filter id="boil" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="1" result="n">
+        <animate attributeName="seed" values="1;7;13;21" dur="0.5s" calcMode="discrete" repeatCount="indefinite"/>
+      </feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="4"/>
+    </filter>
+    <filter id="ink" x="-5%" y="-20%" width="110%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" seed="4" result="n">
+        <animate attributeName="seed" values="4;10;16;24" dur="0.5s" calcMode="discrete" repeatCount="indefinite"/>
+      </feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="2.5"/>
+    </filter>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" seed="2">
+        <animate attributeName="seed" values="2;5;8;11;14" dur="0.4s" calcMode="discrete" repeatCount="indefinite"/>
+      </feTurbulence>
+      <feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .08 0"/>
+    </filter>
+  </defs>
+
+  <style>
+    .name { fill:#fff; font-size:58px; font-weight:800; letter-spacing:6px; }
+    .sub  { fill:#9a9a9a; font-size:16px; letter-spacing:4px; }
+    .tw   { fill:#fff; font-size:16px; }
+    .rays { transform-box:fill-box; transform-origin:center; animation:spin 20s linear infinite; }
+    .raysR{ transform-box:fill-box; transform-origin:center; animation:spin 12s linear infinite reverse; }
+    .core { transform-box:fill-box; transform-origin:center; animation:breath 3s ease-in-out infinite; }
+    .type { clip-path:inset(0 100% 0 0); animation:type 2.4s steps(34) .6s forwards; }
+    .cur  { animation:blink 1s steps(1) infinite; }
+    @keyframes spin   { to{transform:rotate(360deg)} }
+    @keyframes breath { 0%,100%{transform:scale(1)} 50%{transform:scale(.8)} }
+    @keyframes type   { to{clip-path:inset(0 0 0 0)} }
+    @keyframes blink  { 50%{opacity:0} }
+  </style>
+
+  <rect width="1000" height="260" fill="#000"/>
+
+  <!-- moldura -->
+  <rect x="10" y="10" width="980" height="240" rx="8" fill="none" stroke="#fff" stroke-width="2" filter="url(#boil)"/>
+
+  <!-- sol hipnótico -->
+  <g transform="translate(150 130)" fill="none" stroke="#fff" filter="url(#boil)">
+    <g class="rays" stroke-width="2.5" stroke-linecap="round">
+      <line x1="0" y1="-96" x2="0" y2="-74"/><line x1="0" y1="96" x2="0" y2="74"/>
+      <line x1="-96" y1="0" x2="-74" y2="0"/><line x1="96" y1="0" x2="74" y2="0"/>
+      <line x1="68" y1="68" x2="52" y2="52"/><line x1="-68" y1="-68" x2="-52" y2="-52"/>
+      <line x1="68" y1="-68" x2="52" y2="-52"/><line x1="-68" y1="68" x2="-52" y2="52"/>
+    </g>
+    <circle r="64" stroke-width="1.3" stroke-dasharray="3 6" class="raysR"/>
+    <g class="core">
+      <circle r="46" stroke-width="2.5"/>
+      <circle r="32" stroke-width="1.6"/>
+      <circle r="18" stroke-width="1.6"/>
+      <circle r="7" fill="#fff"/>
+    </g>
+  </g>
+
+  <!-- texto -->
+  <g filter="url(#ink)">
+    <text x="290" y="118" class="name">EDUARDO</text>
+    <line x1="292" y1="140" x2="930" y2="140" stroke="#fff" stroke-width="2"/>
+  </g>
+  <text x="292" y="172" class="sub">FULL-STACK DEVELOPER</text>
+  <g class="type">
+    <text x="292" y="208" class="tw">&gt; front · back · tools · always looping</text>
+  </g>
+
+  <rect width="1000" height="260" filter="url(#grain)" pointer-events="none"/>
+</svg>

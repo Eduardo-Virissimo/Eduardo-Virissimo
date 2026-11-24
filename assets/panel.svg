@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="560" viewBox="0 0 600 560" font-family="'JetBrains Mono','Fira Code',Consolas,'Courier New',monospace">
+  <defs>
+    <!-- "boil": traço tremido de animação quadro a quadro -->
+    <filter id="boil" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="1" result="n">
+        <animate attributeName="seed" values="1;7;13;21" dur="0.5s" calcMode="discrete" repeatCount="indefinite"/>
+      </feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="3.5"/>
+    </filter>
+    <filter id="boilSoft" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="1" seed="3" result="n">
+        <animate attributeName="seed" values="3;9;17;27" dur="0.5s" calcMode="discrete" repeatCount="indefinite"/>
+      </feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="1.6"/>
+    </filter>
+    <!-- granulado de filme -->
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="1" seed="2">
+        <animate attributeName="seed" values="2;5;8;11;14" dur="0.4s" calcMode="discrete" repeatCount="indefinite"/>
+      </feTurbulence>
+      <feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .07 0"/>
+    </filter>
+    <clipPath id="band"><rect x="20" y="486" width="560" height="36"/></clipPath>
+  </defs>
+
+  <style>
+    .t   { fill:#f2f2f2; font-size:15px; white-space:pre; }
+    .br  { fill:#5c5c5c; }
+    .h   { fill:#ffffff; font-weight:700; letter-spacing:3px; font-size:14px; }
+    .s   { fill:#8a8a8a; font-size:12px; }
+    .l   { opacity:0; animation:in .3s steps(3) forwards; }
+    .cur { animation:blink 1s steps(1) infinite; }
+    .spin   { transform-box:fill-box; transform-origin:center; animation:spin 14s linear infinite; }
+    .spinR  { transform-box:fill-box; transform-origin:center; animation:spin 9s linear infinite reverse; }
+    .breath { transform-box:fill-box; transform-origin:center; animation:breath 3s ease-in-out infinite; }
+    .marq   { animation:marq 18s linear infinite; }
+    @keyframes in     { to{opacity:1} }
+    @keyframes blink  { 50%{opacity:0} }
+    @keyframes spin   { to{transform:rotate(360deg)} }
+    @keyframes breath { 0%,100%{transform:scale(1)} 50%{transform:scale(.82)} }
+    @keyframes marq   { from{transform:translateX(0)} to{transform:translateX(-560px)} }
+  </style>
+
+  <rect width="600" height="560" fill="#000"/>
+
+  <!-- moldura desenhada à mão -->
+  <g fill="none" stroke="#fff" stroke-width="2" filter="url(#boil)">
+    <rect x="12" y="12" width="576" height="536" rx="6"/>
+    <line x1="12" y1="52" x2="588" y2="52"/>
+    <line x1="20" y1="486" x2="580" y2="486" stroke-width="1.2"/>
+    <line x1="20" y1="522" x2="580" y2="522" stroke-width="1.2"/>
+  </g>
+
+  <!-- barra de título -->
+  <g fill="none" stroke="#fff" stroke-width="1.6" filter="url(#boilSoft)">
+    <circle cx="36" cy="32" r="6"/><circle cx="56" cy="32" r="6"/><circle cx="76" cy="32" r="6" fill="#fff"/>
+  </g>
+  <text x="568" y="37" text-anchor="end" class="s">~/stack.loop</text>
+
+  <!-- elemento hipnótico -->
+  <g transform="translate(470 210)" fill="none" stroke="#fff" filter="url(#boilSoft)">
+    <circle r="78" stroke-width="1.2" stroke-dasharray="2 7" class="spin"/>
+    <circle r="62" stroke-width="2" stroke-dasharray="22 10" class="spinR"/>
+    <circle r="46" stroke-width="1.2" stroke-dasharray="4 4" class="spin"/>
+    <g class="breath">
+      <circle r="30" stroke-width="2"/>
+      <circle r="18" stroke-width="1.4"/>
+      <circle r="7" fill="#fff"/>
+    </g>
+  </g>
+
+  <!-- árvore -->
+  <g xml:space="preserve">
+    <text x="36" y="92"  class="t l" style="animation-delay:.30s"><tspan class="br">╭─ </tspan><tspan class="h">𝙵𝚁𝙾𝙽𝚃-𝙴𝙽𝙳</tspan></text>
+    <text x="36" y="116" class="t l" style="animation-delay:.42s"><tspan class="br">│  ├─ </tspan>HTML5</text>
+    <text x="36" y="140" class="t l" style="animation-delay:.54s"><tspan class="br">│  ├─ </tspan>CSS3 / TailwindCSS</text>
+    <text x="36" y="164" class="t l" style="animation-delay:.66s"><tspan class="br">│  └─ </tspan>TypeScript / JS / React ✦</text>
+    <text x="36" y="188" class="t l" style="animation-delay:.78s"><tspan class="br">│</tspan></text>
+    <text x="36" y="212" class="t l" style="animation-delay:.90s"><tspan class="br">├─ </tspan><tspan class="h">𝙱𝙰𝙲𝙺-𝙴𝙽𝙳</tspan></text>
+    <text x="36" y="236" class="t l" style="animation-delay:1.02s"><tspan class="br">│  ├─ </tspan>Node.js ✦</text>
+    <text x="36" y="260" class="t l" style="animation-delay:1.14s"><tspan class="br">│  ├─ </tspan>PHP ✦</text>
+    <text x="36" y="284" class="t l" style="animation-delay:1.26s"><tspan class="br">│  └─ </tspan>MySQL</text>
+    <text x="36" y="308" class="t l" style="animation-delay:1.38s"><tspan class="br">│</tspan></text>
+    <text x="36" y="332" class="t l" style="animation-delay:1.50s"><tspan class="br">╰─ </tspan><tspan class="h">𝚃𝙾𝙾𝙻𝚂 &amp; 𝙾𝚃𝙷𝙴𝚁𝚂</tspan></text>
+    <text x="36" y="356" class="t l" style="animation-delay:1.62s"><tspan class="br">   ├─ </tspan>Git / GitHub</text>
+    <text x="36" y="380" class="t l" style="animation-delay:1.74s"><tspan class="br">   ├─ </tspan>Linux / Shell</text>
+    <text x="36" y="404" class="t l" style="animation-delay:1.86s"><tspan class="br">   ├─ </tspan>Docker / CI/CD</text>
+    <text x="36" y="428" class="t l" style="animation-delay:1.98s"><tspan class="br">   └─ </tspan>Figma / UI/UX</text>
+  </g>
+
+  <text x="36" y="464" class="s l" style="animation-delay:2.2s">✦ advanced studies</text>
+  <text x="564" y="464" text-anchor="end" class="s l" style="animation-delay:2.2s">_<tspan class="cur" fill="#fff">█</tspan></text>
+
+  <!-- faixa rolando -->
+  <g clip-path="url(#band)">
+    <g class="marq">
+      <text x="20"  y="509" class="h" font-size="13" textLength="536" lengthAdjust="spacing">FRONT-END ✦ BACK-END ✦ TOOLS ✦ ALWAYS LEARNING ✦</text>
+      <text x="580" y="509" class="h" font-size="13" textLength="536" lengthAdjust="spacing">FRONT-END ✦ BACK-END ✦ TOOLS ✦ ALWAYS LEARNING ✦</text>
+    </g>
+  </g>
+
+  <!-- granulado -->
+  <rect width="600" height="560" filter="url(#grain)" pointer-events="none"/>
+</svg>

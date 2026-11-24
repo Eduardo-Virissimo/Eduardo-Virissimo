@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="190" height="52" viewBox="0 0 190 52" font-family="'JetBrains Mono','Fira Code',Consolas,'Courier New',monospace">
+  <defs>
+    <filter id="boil" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="1" result="n">
+        <animate attributeName="seed" values="1;7;13;21" dur="0.5s" calcMode="discrete" repeatCount="indefinite"/>
+      </feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="2.5"/>
+    </filter>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" seed="2">
+        <animate attributeName="seed" values="2;5;8;11;14" dur="0.4s" calcMode="discrete" repeatCount="indefinite"/>
+      </feTurbulence>
+      <feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .07 0"/>
+    </filter>
+  </defs>
+  <style>
+    .spin  { transform-box:fill-box; transform-origin:center; animation:spin 12s linear infinite; }
+    .spinR { transform-box:fill-box; transform-origin:center; animation:spin 8s linear infinite reverse; }
+    .br    { transform-box:fill-box; transform-origin:center; animation:br 3s ease-in-out infinite; }
+    .wave  { animation:wave 2.4s ease-in-out infinite alternate; }
+    .cur   { animation:blink 1s steps(1) infinite; }
+    .in    { opacity:0; animation:in .4s steps(3) forwards; }
+    @keyframes spin  { to{transform:rotate(360deg)} }
+    @keyframes br    { 0%,100%{transform:scale(1)} 50%{transform:scale(.75)} }
+    @keyframes wave  { from{transform:translateY(-6px)} to{transform:translateY(6px)} }
+    @keyframes blink { 50%{opacity:0} }
+    @keyframes in    { to{opacity:1} }
+  </style>
+  <rect width="190" height="52" fill="#000"/>
+
+  <rect x="5" y="5" width="180" height="42" rx="4" fill="none" stroke="#fff" stroke-width="1.8" filter="url(#boil)"/>
+  <g transform="translate(26 26.0)" fill="none" stroke="#fff" filter="url(#boil)">
+    <circle r="8" stroke-width="1.4" stroke-dasharray="3 3" class="spin" style="animation-delay:-0s"/>
+    <circle r="2.5" fill="#fff"/>
+  </g>
+  <text x="110.0" y="31.0" text-anchor="middle" fill="#fff" font-size="13" font-weight="700" letter-spacing="2">PROJETOS</text>
+  <rect width="190" height="52" filter="url(#grain)"/>
+</svg>

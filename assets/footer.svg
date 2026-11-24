@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="150" viewBox="0 0 1000 150" font-family="'JetBrains Mono','Fira Code',Consolas,'Courier New',monospace">
+  <defs>
+    <filter id="boil" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="1" result="n">
+        <animate attributeName="seed" values="1;7;13;21" dur="0.5s" calcMode="discrete" repeatCount="indefinite"/>
+      </feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="3"/>
+    </filter>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" seed="2">
+        <animate attributeName="seed" values="2;5;8;11;14" dur="0.4s" calcMode="discrete" repeatCount="indefinite"/>
+      </feTurbulence>
+      <feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .07 0"/>
+    </filter>
+  </defs>
+  <style>
+    .spin  { transform-box:fill-box; transform-origin:center; animation:spin 12s linear infinite; }
+    .spinR { transform-box:fill-box; transform-origin:center; animation:spin 8s linear infinite reverse; }
+    .br    { transform-box:fill-box; transform-origin:center; animation:br 3s ease-in-out infinite; }
+    .wave  { animation:wave 2.4s ease-in-out infinite alternate; }
+    .cur   { animation:blink 1s steps(1) infinite; }
+    .in    { opacity:0; animation:in .4s steps(3) forwards; }
+    @keyframes spin  { to{transform:rotate(360deg)} }
+    @keyframes br    { 0%,100%{transform:scale(1)} 50%{transform:scale(.75)} }
+    @keyframes wave  { from{transform:translateY(-6px)} to{transform:translateY(6px)} }
+    @keyframes blink { 50%{opacity:0} }
+    @keyframes in    { to{opacity:1} }
+  </style>
+  <rect width="1000" height="150" fill="#000"/>
+
+  <line x1="20" y1="20" x2="980" y2="20" stroke="#fff" stroke-width="1.8" filter="url(#boil)"/>
+  <g transform="translate(500 82)" fill="none" stroke="#fff" filter="url(#boil)">
+    <g class="spin" stroke-width="2.5" stroke-linecap="round">
+      <line x1="0" y1="-50" x2="0" y2="-38"/><line x1="0" y1="50" x2="0" y2="38"/>
+      <line x1="-50" y1="0" x2="-38" y2="0"/><line x1="50" y1="0" x2="38" y2="0"/>
+      <line x1="35" y1="35" x2="27" y2="27"/><line x1="-35" y1="-35" x2="-27" y2="-27"/>
+      <line x1="35" y1="-35" x2="27" y2="-27"/><line x1="-35" y1="35" x2="-27" y2="27"/>
+    </g>
+    <g class="br"><circle r="22" stroke-width="2"/><circle r="8" fill="#fff"/></g>
+  </g>
+  <text x="80" y="90" fill="#9a9a9a" font-size="14" letter-spacing="4">THANKS FOR STOPPING BY</text>
+  <text x="920" y="90" text-anchor="end" fill="#9a9a9a" font-size="14" letter-spacing="4">KEEP LOOPING ✦</text>
+  <rect width="1000" height="150" filter="url(#grain)"/>
+</svg>
