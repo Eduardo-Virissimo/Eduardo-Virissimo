@@ -93,15 +93,22 @@ const SONG = { title: "Be Yourself", artist: "Audioslave", len: 273, at: 72 };  
 const CAPA = "data:image/jpeg;base64," + fs.readFileSync(path.join(HERE, "capa.jpg")).toString("base64");
 const PW = 328, PH = 124;                   // tamanho do player
 const PX = 666, PY = 376;                   // onde ele termina, em coordenadas da página (1000 de largura)
-const FALL = { delay: 0.9, dur: 1.5, from: -150 };
+// hit: o player encosta no grafo; land: termina de espremer; dur: fim do quique (segundos)
+const FALL = { delay: 0.9, from: -150, hit: 0.85, land: 1.4, dur: 1.72 };
+// O hero e o grafo carregam em momentos um pouco diferentes no GitHub (até ~100ms). A passagem de uma
+// imagem pra outra acontece enquanto o player espreme o grafo, que é a parte lenta da queda, então
+// essa diferença vira no máximo um desalinhamento pequeno em vez do player sumir por um instante.
+const GIT_Y = 370, HIT_Y = GIT_Y - PH;      // topo do grafo na página; y do player quando encosta nele
+const BOUNCE = 8;
+const fp = (t) => r((t / FALL.dur) * 100);
+const IMPACT = "cubic-bezier(.5,0,.9,.5)", PRESS = "cubic-bezier(.3,.5,.5,1)", SOFT = "ease-in-out";
 // queda em coordenadas da página; a imagem subtrai o próprio deslocamento vertical
 const fallKeys = (oy) => {
   const y = (v) => `translateY(${r(v - oy)}px)`;
-  return `0% { transform:${y(FALL.from)}; animation-timing-function:cubic-bezier(.55,0,1,.45); }
-      66.7% { transform:${y(PY)}; animation-timing-function:ease-out; }
-      78% { transform:${y(PY - 12)}; animation-timing-function:ease-in; }
-      88% { transform:${y(PY)}; animation-timing-function:ease-out; }
-      94% { transform:${y(PY - 3)}; animation-timing-function:ease-in; }
+  return `0% { transform:${y(FALL.from)}; animation-timing-function:${IMPACT}; }
+      ${fp(FALL.hit)}% { transform:${y(HIT_Y)}; animation-timing-function:${PRESS}; }
+      ${fp(FALL.land)}% { transform:${y(PY)}; animation-timing-function:${SOFT}; }
+      ${fp(FALL.land + 0.15)}% { transform:${y(PY - BOUNCE)}; animation-timing-function:${SOFT}; }
       100% { transform:${y(PY)}; }`;
 };
 const mmss = (t) => `${Math.floor(t / 60)}:${String(t % 60).padStart(2, "0")}`;
@@ -115,8 +122,7 @@ function clock(ctx) {
 function player(ctx) {
   const tSize = Math.min(16, 16 * 170 / SANS.width(SONG.title, 16));
   const eq = [0, 1, 2, 3].map((i) => `<rect class="eq" style="animation-duration:${(0.7 + i * 0.17).toFixed(2)}s;animation-delay:-${(i * 0.23).toFixed(2)}s" x="${294 + i * 6}" y="28" width="3.5" height="14" rx="1.5" fill="${PAPER}"/>`).join("");
-  return `<rect x="5" y="8" width="${PW}" height="${PH}" rx="14" fill="#000" fill-opacity=".22"/>
-    <rect width="${PW}" height="${PH}" rx="14" fill="${INK}" stroke="${LINE}" stroke-width="1.5"/>
+  return `<rect width="${PW}" height="${PH}" rx="14" fill="${INK}" stroke="${LINE}" stroke-width="1.5"/>
     <clipPath id="capa"><rect x="14" y="16" width="92" height="92" rx="8"/></clipPath>
     <image href="${CAPA}" x="14" y="16" width="92" height="92" preserveAspectRatio="xMidYMid slice" clip-path="url(#capa)"/>
     ${SANS.text(ctx, SONG.title, 122, 42, tSize)}
@@ -226,7 +232,7 @@ const fallAnim = (cls, oy) => `
   <g transform="translate(${PX} 0)"><g class="fallh" style="transform:translateY(${H + 40}px)">${player(ctx)}</g></g>`;
   const heroStyle = style + PLAYER_STYLE + fallAnim("fallh", 0) + `
     .squish { transform-origin:${W / 2}px ${H / 2}px; animation:squish ${FALL.dur}s ${FALL.delay}s both; }
-    @keyframes squish { 0%,22% { transform:scale(1,1); } 38% { transform:scale(.99,.955); } 50% { transform:scale(1.004,1.012); } 60% { transform:scale(.999,.996); } 68%,100% { transform:scale(1,1); } }`;
+    @keyframes squish { 0%,${fp(0.33)}% { transform:scale(1,1); } ${fp(0.57)}% { transform:scale(.99,.955); } ${fp(0.75)}% { transform:scale(1.004,1.012); } ${fp(0.9)}% { transform:scale(.999,.996); } ${fp(1.02)}%,100% { transform:scale(1,1); } }`;
   write("panel-hero", W, H, {
     label: "Eduardo. dev. full stack. Formado em Análise e Desenvolvimento de Sistemas.", body: heroBody, style: heroStyle, ctx,
     defs: `<clipPath id="pc"><rect x="20" y="60" width="${W - 40}" height="${H - 72}"/></clipPath>`,
@@ -297,7 +303,19 @@ const fallAnim = (cls, oy) => `
     ["M150 150 C176 150 174 206 200 206 H244 C266 206 268 150 292 150", 1.7, 3.6],
   ];
   const commits = [[40, 150, 0.3], [90, 150, 0.9], [150, 150, 1.5], [140, 96, 1.4], [196, 96, 2.1], [200, 206, 2.2], [244, 206, 2.9], [248, 150, 3.1], [292, 150, 3.7]];
-  let style = "", body = `  <g class="gsq">${panel(W, H, PAPER)}</g>\n  <g class="ggr"><g class="all">`;
+  const R = 16, L = 6, Rt = W - 6, B = H - 6, MID = B - R - (L + R);   // MID: altura do meio esticável
+  const edge = `stroke="${EDGE}" stroke-width="1.5" fill="none"`;
+  const shell = `<g class="gtop">
+    <path d="M${L} ${L + R + 1} V${L + R} A${R} ${R} 0 0 1 ${L + R} ${L} H${Rt - R} A${R} ${R} 0 0 1 ${Rt} ${L + R} V${L + R + 1} Z" fill="${PAPER}"/>
+    <path d="M${L} ${L + R + 0.5} V${L + R} A${R} ${R} 0 0 1 ${L + R} ${L} H${Rt - R} A${R} ${R} 0 0 1 ${Rt} ${L + R} V${L + R + 0.5}" ${edge}/>
+  </g>
+  <g class="gmid">
+    <rect x="${L}" y="${L + R}" width="${Rt - L}" height="${MID}" fill="${PAPER}"/>
+    <path d="M${L} ${L + R} V${B - R} M${Rt} ${L + R} V${B - R}" ${edge} vector-effect="non-scaling-stroke"/>
+  </g>
+  <path d="M${L} ${B - R - 1} V${B - R} A${R} ${R} 0 0 0 ${L + R} ${B} H${Rt - R} A${R} ${R} 0 0 0 ${Rt} ${B - R} V${B - R - 1} Z" fill="${PAPER}"/>
+  <path d="M${L} ${B - R - 0.5} V${B - R} A${R} ${R} 0 0 0 ${L + R} ${B} H${Rt - R} A${R} ${R} 0 0 0 ${Rt} ${B - R} V${B - R - 0.5}" ${edge}/>`;
+  let style = "", body = `  ${shell}\n  <g class="ggr"><g class="all">`;
   lines.forEach(([d, s, e], i) => {
     body += `\n    <path class="g${i}" pathLength="1" d="${d}" ${ink}/>`;
     style += `
@@ -320,12 +338,22 @@ const fallAnim = (cls, oy) => `
   style += `
     .all { animation:all ${D}s linear infinite; }
     @keyframes all { 0%,92% { opacity:1; } 97%,100% { opacity:0; } }`;
-  const top = PY - 370 + PH + 6, k = (H - 6 - top) / (H - 12);
-  style += PLAYER_STYLE + fallAnim("fallg", 370) + `
-    .gsq { transform-origin:${W / 2}px ${H - 6}px; transform:scaleY(${r(k * 1000) / 1000}); animation:gsq ${FALL.dur}s ${FALL.delay}s both; }
-    @keyframes gsq { 0%,64.8% { transform:scaleY(1); } 67% { transform:scaleY(${r(k * 0.9 * 1000) / 1000}); } 80% { transform:scaleY(${r(k * 1.05 * 1000) / 1000}); } 90%,100% { transform:scaleY(${r(k * 1000) / 1000}); } }
-    .ggr { transform-origin:168px 152px; transform:translate(0,${r((top + H - 6) / 2 - 152)}px) scale(.68); animation:ggr ${FALL.dur}s ${FALL.delay}s both; }
-    @keyframes ggr { 0%,64.8% { transform:translate(0,0) scale(1); } 67% { transform:translate(0,${r((top + H - 6) / 2 - 152 + 6)}px) scale(.74,.56); } 80% { transform:translate(0,${r((top + H - 6) / 2 - 152 - 2)}px) scale(.66,.74); } 90%,100% { transform:translate(0,${r((top + H - 6) / 2 - 152)}px) scale(.68); } }`;
+  // com o player em y: quanto a tampa desce e quanto o meio estica (os dois lineares em y, então
+  // usando os mesmos tempos e curvas da queda a borda acompanha o player certinho)
+  const drop = (y) => Math.max(0, y - (GIT_Y - PH));
+  const midAt = (y) => +((MID - drop(y)) / MID).toFixed(4);
+  const G = 0.68;
+  const keys = (fn) => `0%,${fp(FALL.hit)}% { transform:${fn(GIT_Y - PH)}; animation-timing-function:${PRESS}; } ${fp(FALL.land)}% { transform:${fn(PY)}; animation-timing-function:${SOFT}; } ${fp(FALL.land + 0.15)}% { transform:${fn(PY - BOUNCE)}; animation-timing-function:${SOFT}; } 100% { transform:${fn(PY)}; }`;
+  const tTop = (y) => `translateY(${drop(y)}px)`, tMid = (y) => `scaleY(${midAt(y)})`;
+  // o desenho só encolhe por igual e fica centrado no espaço que sobra
+  const tGr = (y) => drop(y) === 0 ? "translate(0,0) scale(1)" : `translate(0,${r((drop(y) + 6 + B) / 2 - 152)}px) scale(${G})`;
+  style += PLAYER_STYLE + fallAnim("fallg", GIT_Y) + `
+    .gtop { transform:${tTop(PY)}; animation:gtop ${FALL.dur}s ${FALL.delay}s both; }
+    @keyframes gtop { ${keys(tTop)} }
+    .gmid { transform-origin:${W / 2}px ${B - R}px; transform:${tMid(PY)}; animation:gmid ${FALL.dur}s ${FALL.delay}s both; }
+    @keyframes gmid { ${keys(tMid)} }
+    .ggr { transform-origin:168px 152px; transform:${tGr(PY)}; animation:ggr ${FALL.dur}s ${FALL.delay}s both; }
+    @keyframes ggr { ${keys(tGr)} }`;
   write("panel-git", W, H, { label: `Tocando agora: ${SONG.title}, de ${SONG.artist}.`, body, style, ctx });
 }
 
