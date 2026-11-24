@@ -187,25 +187,14 @@ def spiral(size, x, y, cls="", stroke=PAPER, lead=0):
             f'<g mask="url(#{mid})">{shape}</g>')
 
 
-def logo(x, y, size, sw_px=3, dot=MINT):
-    """Logo do portfólio (viewBox 0..100) escalado para `size` px."""
-    k = size / 100
-    path = ('M10 10 L83 10 Q90 10 90 17 L90 83 Q90 90 83 90 L17 90 Q10 90 10 83 L10 32 Q10 25 17 25 '
-            'L68 25 Q75 25 75 32 L75 68 Q75 75 68 75 L32 75 Q25 75 25 68 L25 47 Q25 40 32 40 L53 40 '
-            'Q60 40 60 47 L60 53 Q60 60 53 60 L40 60')
-    out = (f'<g transform="translate({f1(x)} {f1(y)}) scale({k:.4f})" fill="none" stroke="{PAPER}" '
-           f'stroke-width="{f1(sw_px / k)}" stroke-linecap="round" stroke-linejoin="round"><path d="{path}"/>')
-    if dot:
-        out += f'<circle cx="40" cy="60" r="{f1(sw_px / k * .9)}" fill="{dot}" stroke="none"/>'
-    return out + "</g>"
-
-
 # ---------- cartão: fundo, grade de pontos, moldura com notch ----------
-NOTCH = {"tr": lambda w, h: (w - 48 - 28, -4, 28, 12), "rb": lambda w, h: (w - 8, h - 48 - 28, 12, 28),
-         "bl": lambda w, h: (48, h - 8, 28, 12), "lt": lambda w, h: (-4, 48, 12, 28)}
+# Cantos de 16px: mais quadrados que antes, sem perder o arredondado do portfólio.
+RX = 16
+NOTCH = {"tr": lambda w, h: (w - 40 - 26, -4, 26, 12), "rb": lambda w, h: (w - 8, h - 40 - 26, 12, 26),
+         "bl": lambda w, h: (40, h - 8, 26, 12), "lt": lambda w, h: (-4, 40, 12, 26)}
 
 
-def card(w, h, uid, notch="tr", rx=28, dots=True):
+def card(w, h, uid, notch="tr", rx=RX, dots=True):
     defs = (f'\n    <clipPath id="clip-{uid}"><rect x="5" y="5" width="{w - 10}" height="{h - 10}" rx="{rx - 5}"/></clipPath>'
             f'\n    <pattern id="dots-{uid}" width="22" height="22" patternUnits="userSpaceOnUse">'
             f'<circle cx="11" cy="11" r="1.1" fill="{PAPER}" fill-opacity=".09"/></pattern>')
@@ -223,74 +212,12 @@ def card(w, h, uid, notch="tr", rx=28, dots=True):
     return defs, body
 
 
-# ---------- header ----------
-w, h = 1000, 300
-defs, body = card(w, h, "hd", "tr")
-body += f'  <g {TICKING}>{spiral(176, w - 60 - 176, (h - 176) // 2, cls="draw")}</g>\n'
-tx = 300
-body += "  " + text_path("Eduardo", tx - 4, 146, 100, tracking=-1) + "\n"
-body += f'  <text x="{tx}" y="194" fill="{MUTE}" font-size="15" letter-spacing="5">DEV. FULL STACK</text>\n'
-body += (f'  <g class="type"><text x="{tx}" y="236" fill="{PAPER}" font-size="16">&gt; front · back · tools · always looping'
-         f'<tspan fill="{MINT}" class="cur"> █</tspan></text></g>\n')
-# avatar (assets/avatar.png, fundo recortado), grande e sem moldura, à esquerda,
-# desenhado por cima da borda de baixo: o moletom "senta" na borda do header.
-with open(os.path.join(HERE, "..", "assets", "avatar.png"), "rb") as f:
-    avatar = base64.b64encode(f.read()).decode()
-ah = 276
-aw = round(ah * 440 / 550)
-body += (f'  <image href="data:image/png;base64,{avatar}" x="36" y="{h - ah}" width="{aw}" height="{ah}"/>\n')
-save("header.svg", svg(w, h, body, defs))
-
-# ---------- botões (navegação e portfólio) ----------
 def arrow(x, y, s, sw=2.2, color=PAPER):
     """Seta ↗ desenhada (a mesma dos cards do portfólio), canto superior esquerdo em (x, y)."""
     k = s / 10
     return (f'<path d="M{f1(x)} {f1(y + 10 * k)} L{f1(x + 10 * k)} {f1(y)} M{f1(x + 2 * k)} {f1(y)} '
             f'H{f1(x + 10 * k)} V{f1(y + 8 * k)}" fill="none" stroke="{color}" stroke-width="{sw}" '
             f'stroke-linecap="round" stroke-linejoin="round"/>')
-
-
-def button(name, label, external=False):
-    w, h = 190, 52
-    cx = w / 2 - (9 if external else 0)
-    body = (f'  <rect width="{w}" height="{h}" rx="16" fill="{INK}"/>\n'
-            f'  <g {TICKING}><rect x="4" y="4" width="{w - 8}" height="{h - 8}" rx="13" fill="none" '
-            f'stroke="{PAPER}" stroke-width="2"/></g>\n'
-            f'  <text x="{f1(cx)}" y="{h / 2 + 5}" text-anchor="middle" fill="{PAPER}" font-size="16" '
-            f'font-weight="700">{label}</text>')
-    if external:
-        body += "\n  " + arrow(cx + len(label) * 5 + 10, h / 2 - 6, 11, color=MINT)
-    save(f"{name}.svg", svg(w, h, body))
-
-
-button("btn-portfolio", "portfólio", external=True)
-
-# ---------- títulos de seção ----------
-SECTIONS = [("projetos", "Projetos em destaque"), ("stack", "Stack & ferramentas"),
-            ("atividade", "Atividade"), ("contato", "Contato")]
-for slug, title in SECTIONS:
-    w, h = 1000, 64
-    # uma pincelada só: sai do título como sublinhado, corre até a direita e enrola
-    # numa espiral quadrada. Espiral espelhada na vertical para a linha entrar por baixo.
-    tw = text_width(title, 28, -0.3)
-    ss, sy = 34, 12                       # espiral de 34px; a linha fica em y = sy + ss
-    sx = w - 28 - ss
-    lead = sx - (28 + tw + 20)
-    body = (f'  <rect width="{w}" height="{h}" rx="18" fill="{INK}"/>\n'
-            f'  {text_path(title, 28, 43, 28, tracking=-0.3)}\n'
-            f'  <g {TICKING}><g transform="translate(0 {2 * sy + ss}) scale(1 -1)">'
-            f'{spiral(ss, sx, sy, lead=lead)}</g></g>')
-    save(f"title-{slug}.svg", svg(w, h, body))
-
-
-# ---------- banners de projeto ----------
-# faixa baixa: nome à esquerda, descrição e tecnologias à direita, tudo dentro do card
-PROJECTS = [("01", "Vanish", "vanish", "electron · typescript", "tr",
-             "Limpa temporários e caches do Windows, mostrando antes exatamente quais pastas vão sumir."),
-            ("02", "Analyst SQL", "analyst-sql", "next.js · typescript · mysql", "rb",
-             "Agente de IA que responde perguntas em português gerando, validando e executando SQL somente leitura."),
-            ("03", "PrintScream", "PrintScream", "typescript · puppeteer", "bl",
-             "Gera PDFs de páginas web a partir de uma URL usando Puppeteer.")]
 
 
 def wrap(text, width):
@@ -304,69 +231,94 @@ def wrap(text, width):
     return lines + [cur]
 
 
-for num, name, repo, tag, notch, desc in PROJECTS:
-    w, h = 1000, 140
+# ---------- header: avatar, nome, apresentação e a espiral ----------
+# A apresentação mora aqui dentro (antes era um parágrafo solto embaixo do header).
+w, h = 1000, 300
+defs, body = card(w, h, "hd", "tr")
+body += f'  <g {TICKING}>{spiral(150, w - 64 - 150, (h - 150) // 2, cls="draw")}</g>\n'
+tx = 300
+body += "  " + text_path("Eduardo", tx - 4, 138, 100, tracking=-1) + "\n"
+body += (f'  <text x="{tx}" y="186" fill="{MUTE}" font-size="18">Técnico em Desenvolvimento de Sistemas</text>\n'
+         f'  <text x="{tx}" y="212" fill="{MUTE}" font-size="18">SESI SENAI SC · dev. full stack</text>\n'
+         f'  <g class="type"><text x="{tx}" y="252" fill="{PAPER}" font-size="18">&gt; trying to be better'
+         f'<tspan fill="{MINT}" class="cur"> █</tspan></text></g>\n')
+# avatar (assets/avatar.png, fundo recortado), grande e sem moldura, à esquerda,
+# desenhado por cima da borda de baixo: o moletom "senta" na borda do header.
+with open(os.path.join(HERE, "..", "assets", "avatar.png"), "rb") as f:
+    avatar = base64.b64encode(f.read()).decode()
+ah = 276
+aw = round(ah * 440 / 550)
+body += f'  <image href="data:image/png;base64,{avatar}" x="36" y="{h - ah}" width="{aw}" height="{ah}"/>\n'
+save("header.svg", svg(w, h, body, defs))
+
+# ---------- links: portfólio, LinkedIn e email numa linha só ----------
+# Três imagens de 1/3 da largura, sem espaço entre elas no README: a soma bate com a
+# largura dos outros cards. Só o nome e a seta, para continuar legível no celular.
+LINKS = [("portfolio", "Portfólio", "tr"), ("linkedin", "LinkedIn", None), ("email", "Email", "bl")]
+for slug, name, notch in LINKS:
+    w, h = 333, 112
+    defs, body = card(w, h, f"l-{slug}", notch, dots=False)
+    body += (f'  {text_path(name, 30, 70, 34, tracking=-0.4)}\n'
+             f'  <g {TICKING}>{arrow(w - 56, 38, 22, sw=3.2, color=MINT)}</g>')
+    save(f"link-{slug}.svg", svg(w, h, body, defs))
+
+# ---------- projetos: nome em cima, descrição e tecnologias embaixo ----------
+PROJECTS = [("01", "Vanish", "electron · typescript", "tr",
+             "Limpa temporários e caches do Windows, mostrando antes exatamente quais pastas vão sumir."),
+            ("02", "Analyst SQL", "next.js · typescript · mysql", "rb",
+             "Agente de IA que responde perguntas em português gerando, validando e executando SQL somente leitura."),
+            ("03", "PrintScream", "typescript · puppeteer", "bl",
+             "Gera PDFs de páginas web a partir de uma URL usando Puppeteer.")]
+for num, name, tag, notch, desc in PROJECTS:
+    lines = wrap(desc, 70)
+    w = 1000
+    tag_y = 120 + 30 * len(lines) + 12
+    h = tag_y + 40
     defs, body = card(w, h, f"p{num}", notch)
-    body += (f'  <text x="44" y="52" fill="{MUTE}" font-size="13">Eduardo-Virissimo/{repo}</text>\n'
-             f'  {text_path(name, 42, 104, 44, tracking=-0.4)}\n')
-    for i, line in enumerate(wrap(desc, 56)[:2]):
-        body += f'  <text x="430" y="{58 + i * 22}" fill="{PAPER}" font-size="15">{line}</text>\n'
-    body += f'  <text x="430" y="110" fill="{MUTE}" font-size="14">&gt; {tag}<tspan fill="{MINT}" class="cur"> █</tspan></text>'
+    body += (f'  {text_path(name, 42, 82, 48, tracking=-0.5)}\n'
+             f'  <g {TICKING}>{arrow(w - 74, 42, 24, sw=3.2, color=MINT)}</g>\n')
+    for i, line in enumerate(lines):
+        body += f'  <text x="44" y="{122 + i * 30}" fill="{PAPER}" font-size="21">{line}</text>\n'
+    body += (f'  <text x="44" y="{tag_y}" fill="{MUTE}" font-size="18">&gt; {tag}'
+             f'<tspan fill="{MINT}" class="cur"> █</tspan></text>')
     save(f"project-{num}.svg", svg(w, h, body, defs))
 
-# ---------- stack: um card só, três colunas de "teclas" ----------
-# Cada tecnologia é uma tecla com borda tremendo; as de estudo avançado ficam em menta.
+# ---------- stack: um card só, três colunas de teclas sem borda ----------
+# As teclas são preenchidas (sem contorno) para o card não virar um mar de bordas;
+# as de estudo avançado ganham o texto e um ponto em menta.
+CHIP = "#1d1d21"
 GROUPS = [("Front-end", [("HTML5", 0), ("CSS3", 0), ("Tailwind", 0), ("TypeScript", 1), ("JavaScript", 1), ("React", 1)]),
           ("Back-end", [("Node.js", 1), ("PHP", 1), ("MySQL", 0)]),
           ("Ferramentas", [("Git", 0), ("GitHub", 0), ("Linux", 0), ("Shell", 0), ("Docker", 0), ("CI/CD", 0),
                            ("Figma", 0), ("UI/UX", 0)])]
-w, col_w, key_h, gap = 1000, 272, 40, 12
+w, col_w, key_h, gap = 1000, 280, 42, 10
 cols, bottom = [], 0
 for ci, (title, items) in enumerate(GROUPS):
-    x0 = 48 + ci * 312
-    out = [text_path(title, x0, 100, 28, tracking=-0.3)]
-    x, y = x0, 122
+    x0 = 44 + ci * 312
+    out = [text_path(title, x0, 106, 30, tracking=-0.3)]
+    x, y = x0, 128
     for label, adv in items:
-        kw = len(label) * 9 + 36
+        kw = len(label) * 10 + 32 + (16 if adv else 0)
         if x + kw > x0 + col_w:
             x, y = x0, y + key_h + gap
-        color = MINT if adv else PAPER
-        out.append(f'<g {TICKING}><rect x="{x}" y="{y}" width="{kw}" height="{key_h}" rx="{key_h // 2}" '
-                   f'fill="none" stroke="{color}" stroke-width="2"/></g>'
-                   f'<text x="{x + kw / 2}" y="{y + 25}" text-anchor="middle" fill="{color}" font-size="15">{label}</text>')
-        x += kw + 10
+        out.append(f'<rect x="{x}" y="{y}" width="{kw}" height="{key_h}" rx="8" fill="{CHIP}"/>')
+        tx_ = x + 16
+        if adv:
+            out.append(f'<circle cx="{x + 18}" cy="{y + key_h / 2}" r="4" fill="{MINT}"/>')
+            tx_ += 16
+        out.append(f'<text x="{tx_}" y="{y + 27}" fill="{MINT if adv else PAPER}" font-size="17">{label}</text>')
+        x += kw + 8
     bottom = max(bottom, y + key_h)
     cols.append(out)
-h = bottom + 72
+h = bottom + 74
 defs, body = card(w, h, "st", "tr")
-body += f'  <text x="48" y="52" fill="{MUTE}" font-size="13">~/stack</text>\n'
+body += f'  <text x="44" y="56" fill="{MUTE}" font-size="16">~/stack</text>\n'
 for ci, out in enumerate(cols):
     if ci:
-        lx = 48 + ci * 312 - 22
-        body += f'  <line x1="{lx}" y1="76" x2="{lx}" y2="{bottom}" stroke="{LINE}" stroke-width="2" stroke-linecap="round"/>\n'
+        lx = 44 + ci * 312 - 18
+        body += f'  <line x1="{lx}" y1="82" x2="{lx}" y2="{bottom}" stroke="{LINE}" stroke-width="2" stroke-linecap="round"/>\n'
     body += "  " + "\n  ".join(out) + "\n"
-body += (f'  <g {TICKING}><rect x="48" y="{h - 46}" width="28" height="16" rx="8" fill="none" stroke="{MINT}" '
-         f'stroke-width="2"/></g>\n'
-         f'  <text x="88" y="{h - 33}" fill="{MUTE}" font-size="14">estudos avançados</text>')
+body += (f'  <circle cx="50" cy="{h - 40}" r="4" fill="{MINT}"/>\n'
+         f'  <text x="64" y="{h - 34}" fill="{MUTE}" font-size="16">estudos avançados</text>')
 save("stack.svg", svg(w, h, body, defs))
-
-# ---------- contato: dois cards-link ----------
-CONTACTS = [("linkedin", "LinkedIn", "eduardo-teixeira-virissimo", "tr"),
-            ("email", "Email", "eduardoteixeiravirissimo@gmail.com", "bl")]
-for slug, name, handle, notch in CONTACTS:
-    w, h = 490, 120
-    defs, body = card(w, h, f"c-{slug}", notch)
-    body += (f'  {text_path(name, 38, 66, 34, tracking=-0.4)}\n'
-             f'  <text x="40" y="94" fill="{MUTE}" font-size="14">{handle}</text>\n'
-             f'  <g {TICKING}>{arrow(w - 60, 32, 20, sw=3, color=MINT)}</g>')
-    save(f"contact-{slug}.svg", svg(w, h, body, defs))
-
-# ---------- rodapé ----------
-w, h = 1000, 96
-defs, body = card(w, h, "ft", "bl")
-body += (f'  <g {TICKING}>{logo(478, 26, 44, 3.6)}</g>\n'
-         f'  <text x="80" y="53" fill="{MUTE}" font-size="13" letter-spacing="4">THANKS FOR STOPPING BY</text>\n'
-         f'  <text x="920" y="53" text-anchor="end" fill="{MUTE}" font-size="13" letter-spacing="4">'
-         f'KEEP LOOPING <tspan fill="{MINT}">✦</tspan></text>')
-save("footer.svg", svg(w, h, body, defs))
 print("ok")
