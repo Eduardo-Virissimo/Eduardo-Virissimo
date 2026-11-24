@@ -1,33 +1,25 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="333" height="72" viewBox="0 0 333 72" font-family="ui-monospace,'JetBrains Mono',SFMono-Regular,Menlo,Consolas,monospace">
+<svg xmlns="http://www.w3.org/2000/svg" width="333" height="64" viewBox="0 0 333 64">
   <defs>
-    <filter id="tick" filterUnits="userSpaceOnUse" x="-100" y="-100" width="1200" height="1000">
+    <filter id="tick" filterUnits="userSpaceOnUse" x="-50" y="-50" width="1100" height="600">
       <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="1" result="n">
         <animate attributeName="seed" values="1;7;13;21" dur="0.5s" calcMode="discrete" repeatCount="indefinite"/>
       </feTurbulence>
       <feDisplacementMap in="SourceGraphic" in2="n" scale="3"/>
     </filter>
-    <clipPath id="clip-l-portfolio"><rect x="5" y="5" width="323" height="62" rx="9"/></clipPath>
-    <pattern id="dots-l-portfolio" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="11" cy="11" r="1" fill="#f4f4f1" fill-opacity=".08"/></pattern>
-    <mask id="notch-l-portfolio"><rect x="-10" y="-10" width="353" height="92" fill="#fff"/><rect x="275" y="-4" width="22" height="10" fill="#000"/></mask>
+    <mask id="n-lportfolio"><rect x="-10" y="-10" width="353" height="84" fill="#fff"/><rect x="275" y="-4" width="22" height="10" fill="#000"/></mask>
+    <path id="s50" d="M86 0V710H351Q473 710 541 651Q609 593 609 489Q609 420 578 370Q547 319 490 292Q432 266 351 266H194V0ZM194 364H348Q421 364 459 396Q497 427 497 489Q497 550 459 581Q421 611 348 611H194Z"/><path id="s6f" d="M294 -12Q218 -12 161 22Q104 56 73 119Q42 182 42 266Q42 351 73 413Q104 475 161 510Q218 544 294 544Q370 544 427 510Q484 475 515 413Q546 351 546 266Q546 182 515 119Q484 56 427 22Q370 -12 294 -12ZM294 80Q362 80 399 129Q436 179 436 266Q436 353 399 403Q362 452 294 452Q227 452 189 403Q152 353 152 266Q152 179 189 129Q227 80 294 80Z"/><path id="s72" d="M75 0V532H172L176 391L167 394Q178 466 212 499Q245 532 302 532H353V437H302Q262 437 235 424Q208 411 195 384Q181 357 181 314V0Z"/><path id="s74" d="M279 0Q203 0 167 35Q131 70 131 144V657H237V152Q237 115 253 101Q269 87 302 87H378V0ZM50 445V532H378V445Z"/><path id="s66" d="M129 0V566Q129 632 166 671Q203 710 281 710H376V623H296Q265 623 250 607Q235 590 235 560V0ZM55 445V532H368V445Z"/><path id="sf3" d="M294 -12Q218 -12 161 22Q104 56 73 119Q42 182 42 266Q42 351 73 413Q104 475 161 510Q218 544 294 544Q370 544 427 510Q484 475 515 413Q546 351 546 266Q546 182 515 119Q484 56 427 22Q370 -12 294 -12ZM294 80Q362 80 399 129Q436 179 436 266Q436 353 399 403Q362 452 294 452Q227 452 189 403Q152 353 152 266Q152 179 189 129Q227 80 294 80ZM247 596 311 730H422L332 596Z"/><path id="s6c" d="M191 0Q139 0 107 27Q75 54 75 113V710H181V123Q181 105 191 96Q200 87 218 87H260V0Z"/><path id="s69" d="M75 0V532H181V0ZM73 609V715H183V609Z"/>
   </defs>
   <style>
-    .draw  { stroke-dasharray:1; animation:draw 2.8s cubic-bezier(.16,1,.3,1) .15s backwards; }
-    .cur   { animation:blink 1.1s steps(1) infinite; }
-    .type  { animation:type 2.4s steps(40) .8s backwards; }
-    @keyframes draw   { from{stroke-dashoffset:1} }
-    @keyframes blink  { 50%{opacity:0} }
-    @keyframes type   { from{clip-path:inset(0 100% 0 0)} }
-    .tw    { animation:tw 3.4s ease-in-out infinite; }
-    .drift { transform-box:fill-box; transform-origin:center; animation:drift 16s ease-in-out infinite alternate; }
-    .fade  { animation:fade .7s cubic-bezier(.16,1,.3,1) backwards; }
-    @keyframes tw     { 50%{opacity:.12} }
-    @keyframes drift  { to{transform:scale(1.09) translate(-1.5%,-1%)} }
-    @keyframes fade   { from{opacity:0} }
+    .draw { stroke-dasharray:1; animation:draw 2.4s cubic-bezier(.16,1,.3,1) .2s backwards; }
+    .cur  { animation:blink 1.1s steps(1) infinite; }
+    .type { animation:type 2s steps(28) .9s backwards; }
+    @keyframes draw  { from{stroke-dashoffset:1} }
+    @keyframes blink { 50%{opacity:0} }
+    @keyframes type  { from{clip-path:inset(0 100% 0 0)} }
     @media (prefers-reduced-motion: reduce) { * { animation:none !important; } }
   </style>
-  <rect x="5" y="5" width="323" height="62" rx="9" fill="#08080a"/>
-  <g fill="#f4f4f1" transform="translate(26 44) scale(0.02000 -0.02000)"><path transform="translate(0 0)" d="M102 0Q92 0 85 7Q78 14 78 24V675Q78 686 85 693Q92 700 102 700H370Q448 700 506 675Q564 651 596 601Q628 552 628 478Q628 403 596 355Q564 306 506 282Q448 258 370 258H221V24Q221 14 214 7Q208 0 197 0ZM219 369H365Q423 369 454 397Q485 424 485 478Q485 528 456 559Q427 589 365 589H219Z"/><path transform="translate(649 0)" d="M296 -10Q216 -10 162 18Q107 46 78 97Q50 148 46 216Q45 234 45 260Q45 286 46 304Q50 373 79 423Q109 474 164 502Q218 530 296 530Q374 530 429 502Q483 474 513 423Q542 373 546 304Q547 286 547 260Q547 234 546 216Q542 148 514 97Q485 46 431 18Q376 -10 296 -10ZM296 89Q349 89 378 123Q407 156 410 221Q411 236 411 260Q411 284 410 299Q407 364 378 397Q349 431 296 431Q243 431 214 397Q185 364 182 299Q181 284 181 260Q181 236 182 221Q185 156 214 123Q243 89 296 89Z"/><path transform="translate(1231 0)" d="M90 0Q80 0 73 7Q66 14 66 24V495Q66 506 73 513Q80 520 90 520H171Q181 520 189 513Q196 506 196 495V454Q219 486 256 503Q292 520 340 520H381Q392 520 398 513Q405 506 405 496V424Q405 414 398 407Q392 400 381 400H303Q255 400 229 373Q202 346 202 299V24Q202 14 195 7Q188 0 177 0Z"/><path transform="translate(1638 0)" d="M301 0Q241 0 200 21Q159 42 139 84Q119 125 119 186V414H40Q30 414 23 421Q16 428 16 438V496Q16 506 23 513Q30 520 40 520H119V686Q119 696 126 703Q132 710 143 710H224Q234 710 241 703Q248 696 248 686V520H373Q383 520 390 513Q397 506 397 496V438Q397 428 390 421Q383 414 373 414H248V197Q248 156 263 133Q277 110 313 110H382Q392 110 399 103Q406 96 406 86V24Q406 14 399 7Q392 0 382 0Z"/><path transform="translate(2057 0)" d="M146 0Q136 0 129 7Q122 14 122 24V414H41Q31 414 24 421Q17 428 17 438V496Q17 506 24 513Q31 520 41 520H122V561Q122 621 144 661Q166 700 209 720Q252 740 318 740H386Q397 740 403 733Q410 726 410 716V658Q410 648 403 641Q397 634 386 634H322Q282 634 267 614Q252 594 252 556V520H376Q387 520 393 513Q400 506 400 496V438Q400 428 393 421Q387 414 376 414H252V24Q252 14 245 7Q238 0 228 0Z"/><path transform="translate(2461 0)" d="M296 -10Q216 -10 162 18Q107 46 78 97Q50 148 46 216Q45 234 45 260Q45 286 46 304Q50 373 79 423Q109 474 164 502Q218 530 296 530Q374 530 429 502Q483 474 513 423Q542 373 546 304Q547 286 547 260Q547 234 546 216Q542 148 514 97Q485 46 431 18Q376 -10 296 -10ZM296 89Q349 89 378 123Q407 156 410 221Q411 236 411 260Q411 284 410 299Q407 364 378 397Q349 431 296 431Q243 431 214 397Q185 364 182 299Q181 284 181 260Q181 236 182 221Q185 156 214 123Q243 89 296 89ZM253 595Q237 595 237 611Q237 619 242 624L324 723Q333 734 340 738Q347 741 361 741H461Q480 741 480 722Q480 715 475 710L350 608Q342 601 335 598Q327 595 315 595Z"/><path transform="translate(3043 0)" d="M91 0Q81 0 74 7Q67 14 67 24V686Q67 696 74 703Q81 710 91 710H174Q184 710 191 703Q198 696 198 686V24Q198 14 191 7Q184 0 174 0Z"/><path transform="translate(3298 0)" d="M90 0Q80 0 73 7Q66 14 66 24V496Q66 506 73 513Q80 520 90 520H173Q184 520 190 513Q197 506 197 496V24Q197 14 190 7Q184 0 173 0ZM86 606Q76 606 69 613Q62 620 62 630V702Q62 712 69 719Q76 726 86 726H177Q188 726 195 719Q202 712 202 702V630Q202 620 195 613Q188 606 177 606Z"/><path transform="translate(3552 0)" d="M296 -10Q216 -10 162 18Q107 46 78 97Q50 148 46 216Q45 234 45 260Q45 286 46 304Q50 373 79 423Q109 474 164 502Q218 530 296 530Q374 530 429 502Q483 474 513 423Q542 373 546 304Q547 286 547 260Q547 234 546 216Q542 148 514 97Q485 46 431 18Q376 -10 296 -10ZM296 89Q349 89 378 123Q407 156 410 221Q411 236 411 260Q411 284 410 299Q407 364 378 397Q349 431 296 431Q243 431 214 397Q185 364 182 299Q181 284 181 260Q181 236 182 221Q185 156 214 123Q243 89 296 89Z"/></g>
-  <g filter="url(#tick)"><path d="M289 42 L303 28 M291.8 28 H303 V39.2" fill="none" stroke="#c2ebd0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></g>
-  <g filter="url(#tick)"><rect x="5" y="5" width="323" height="62" rx="9" fill="none" stroke="#f4f4f1" stroke-width="2" mask="url(#notch-l-portfolio)"/></g>
-
+  <rect x="5" y="5" width="323" height="54" rx="9" fill="#08080a"/>
+  <g fill="#f4f4f1" transform="translate(24 39) scale(0.01800 -0.01800)"><use href="#s50" x="0"/><use href="#s6f" x="645.9"/><use href="#s72" x="1222.8"/><use href="#s74" x="1605.7"/><use href="#s66" x="2004.6"/><use href="#sf3" x="2405.4"/><use href="#s6c" x="2982.3"/><use href="#s69" x="3253.2"/><use href="#s6f" x="3498.1"/></g>
+  <g filter="url(#tick)"><path d="M291 38 L303 26 M293.4 26 H303 V35.6" fill="none" stroke="#c2ebd0" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></g>
+  <g filter="url(#tick)"><rect x="5" y="5" width="323" height="54" rx="9" fill="none" stroke="#f4f4f1" stroke-width="2" mask="url(#n-lportfolio)"/></g>
 </svg>
